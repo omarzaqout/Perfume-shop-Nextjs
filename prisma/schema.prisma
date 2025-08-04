@@ -3,21 +3,129 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  CLIENT
+  ADMIN
+  SELLER
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
 generator client {
   provider = "prisma-client-js"
 }
 
 
 model User {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String   @unique
-  name    String?
-  address Address?
+  id        String   @id @map("_id")
+  email     String   @unique
+  name      String
+  role      Role     @default(CLIENT)
+  createdAt DateTime @default(now())
+
+  brand     Brand?
+  orders    Order[]
+  cart      Cart?
+}
+
+
+model Brand {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String   @unique
+  logoUrl  String?
+
+  ownerId  String   @unique
+  owner    User     @relation(fields: [ownerId], references: [id])
+
+  products Product[]
 }
 
 
 
-// Address is an embedded document
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  price       Float
+  imageUrl    String
+  quantity    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  categoryId  String   @db.ObjectId   
+  category    Category @relation(fields: [categoryId], references: [id])
+
+  brandId     String   @db.ObjectId  
+  brand       Brand    @relation(fields: [brandId], references: [id])
+
+  orderItems OrderItem[] 
+  cartItems  CartItem[]  
+
+}
+
+
+
+model Category {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String    @unique
+  products Product[]
+}
+
+
+model Order {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String      
+  user      User        @relation(fields: [userId], references: [id])
+
+  items     OrderItem[]
+  total     Float
+  status    OrderStatus @default(PENDING)
+
+  createdAt DateTime    @default(now())
+}
+
+
+model OrderItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String   @db.ObjectId
+  order     Order    @relation(fields: [orderId], references: [id])
+
+  productId String   @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id])
+
+
+  quantity  Int
+  price     Float  
+}
+
+model Cart {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String      @unique
+  user      User        @relation(fields: [userId], references: [id])
+  
+
+  items     CartItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  cartId    String   @db.ObjectId
+  cart      Cart     @relation(fields: [cartId], references: [id])
+
+  productId String   @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id])
+
+  quantity  Int
+}
+
+
+
 type Address {
   street String
   city   String
