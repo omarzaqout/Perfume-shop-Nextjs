@@ -120,3 +120,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
+.scroll-hide {
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+
+.scroll-hide::-webkit-scrollbar {
+  display: none; 
+}
