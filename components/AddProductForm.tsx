@@ -39,10 +39,18 @@ import {
 } from "./ui/select";
 import { createProductActions } from "@/actions/product.action";
 
-const AddProductForm = ({ categories }: { categories: ICategory[] }) => {
+const AddProductForm = ({
+  categories,
+  userId,
+}: {
+  categories: ICategory[];
+  userId: string | "";
+}) => {
   console.log("Categories:", categories);
   const [loading, setLoading] = useState(false);
   const [Isclose, setIsclose] = useState(false);
+
+  console.log("User ID:", userId);
 
   const form = useForm({
     resolver: zodResolver(productFormSchema),
@@ -53,7 +61,6 @@ const AddProductForm = ({ categories }: { categories: ICategory[] }) => {
       quantity: 1,
       image: undefined,
       categoryId: "",
-      brandId: "",
     },
   });
 
@@ -70,8 +77,8 @@ const AddProductForm = ({ categories }: { categories: ICategory[] }) => {
         price: 20,
         imageUrl: "",
         quantity: 2,
-        categoryId: "defaultBrandId",
-        brandId: "defaultBrandId",
+        categoryId: values.categoryId,
+        brandId: userId,
       });
 
       console.log("Form submitted successfully");
@@ -92,7 +99,7 @@ const AddProductForm = ({ categories }: { categories: ICategory[] }) => {
       <DialogTrigger asChild>
         <Button className="flex items-center justify-center">
           <Plus className="mr-2" />
-          Add Todo
+          Add Prodect
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

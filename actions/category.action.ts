@@ -2,7 +2,6 @@
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-import { ICategory } from "@/interfaces";
 
 const prisma = new PrismaClient();
 
@@ -16,7 +15,7 @@ export const getCategoryListActions = async () => {
     });
 };
 
-export const createCategoryActions = async ({ name }: ICategory) => {
+export const createCategoryActions = async ({ name }: { name: string }) => {
     await prisma.category.create({
         data: {
             name,

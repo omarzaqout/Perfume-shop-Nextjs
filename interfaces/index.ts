@@ -1,3 +1,5 @@
+
+
 export interface ICategory {
 
     id: string;
@@ -13,4 +15,16 @@ export interface IProduct {
     quantity: number;
     categoryId: string;
     brandId: string;
+}
+
+export interface IUser {
+    id: string;
+    name: string;
+    email: string;
+}
+
+export interface IBrand {
+    name: string;
+    logoUrl: string;
+    ownerId: string;
 }
