@@ -1,6 +1,18 @@
 {
   "HomePage": {
-    "title": "Hello world!",
-    "about": "Go to the about page"
+    "title": "Hello World",
+    "about": "Go to the About page"
+  },
+  "AppBar": {
+    "storeName": "Perfume Store",
+    "shop": "Shop",
+    "about": "About",
+    "signIn": "Sign In",
+    "welcome": "Welcome, {userName}",
+    "cart": "Shopping Cart",
+    "toggleTheme": "Toggle Theme",
+    "changeLanguage": "Change Language",
+    "openMenu": "Open Menu",
+    "closeMenu": "Close Menu"
   }
 }

@@ -11,9 +11,13 @@ export const productFormSchema = z.object({
     .min(10, { message: "Description must be at least 10 characters" })
     .max(500, { message: "Description must not exceed 500 characters" }),
 
-  price: z.coerce.number(),
-  quantity: z.coerce.number(),
+  price: z.coerce.number().min(1, {
+    message: "Price must be at least 1.",
+  }),
 
+  quantity: z.coerce.number().min(1, {
+    message: "Quantity must be at least 1.",
+  }),
   image: z.instanceof(File).optional(),
 
   categoryId: z

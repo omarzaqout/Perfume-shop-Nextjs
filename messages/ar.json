@@ -2,5 +2,17 @@
   "HomePage": {
     "title": "مرحبا بالعالم",
     "about": "الذهاب الى صفحة من نحن"
+  },
+  "AppBar": {
+    "storeName": "متجر عطور",
+    "shop": "تسوق",
+    "about": "من نحن",
+    "signIn": "تسجيل الدخول",
+    "welcome": "مرحباً، {userName}",
+    "cart": "سلة التسوق",
+    "toggleTheme": "تبديل الثيم",
+    "changeLanguage": "تغيير اللغة",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة"
   }
 }

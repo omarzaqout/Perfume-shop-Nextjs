@@ -55,6 +55,7 @@ const AddProductForm = ({ categories }: { categories: ICategory[] }) => {
       categoryId: "",
       brandId: "",
     },
+    mode: "onChange"
   });
 
   const onSubmit = async (
