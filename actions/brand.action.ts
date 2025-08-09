@@ -16,6 +16,15 @@ export const getBrandListActions = async () => {
     });
 };
 
+export const getBrandByOwnerIdActions = async (ownerId: string) => {
+    return await prisma.brand.findFirst({
+        where: { ownerId },
+        select: { id: true },
+    });
+};
+
+
+
 export const createBrandActions = async ({ name, logoUrl, ownerId }: IBrand) => {
     await prisma.brand.create({
         data: {

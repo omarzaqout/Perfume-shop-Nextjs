@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { ICategory } from "@/interfaces";
 
 import {
   Dialog,
@@ -28,16 +27,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { brandFormSchema, productFormSchema } from "@/schema";
+import { brandFormSchema } from "@/schema";
 import Spinner from "./spinner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
-import { createProductActions } from "@/actions/product.action";
+
 import { createBrandActions } from "@/actions/brand.action";
 
 const AddBrandForm = ({ userId }: { userId: string | "" }) => {
@@ -50,7 +42,7 @@ const AddBrandForm = ({ userId }: { userId: string | "" }) => {
     resolver: zodResolver(brandFormSchema),
     defaultValues: {
       name: "",
-      logoUrl: undefined,
+      logoUrl: "",
     },
   });
 

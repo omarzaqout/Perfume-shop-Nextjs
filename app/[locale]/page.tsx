@@ -4,6 +4,7 @@ import AddProductForm from "@/components/AddProductForm";
 import { getCategoryListActions } from "@/actions/category.action";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { createUserAction } from "@/actions/user.action";
+import AddBrandForm from "@/components/AddBrandForm";
 
 export default async function HomePage() {
   const t = await getTranslations("HomePage");
@@ -27,6 +28,7 @@ export default async function HomePage() {
     <div>
       <h1>{t("title")}</h1>
       <AddProductForm categories={categories} userId={safeUserId} />
+      <AddBrandForm userId={safeUserId} />
     </div>
   );
 }

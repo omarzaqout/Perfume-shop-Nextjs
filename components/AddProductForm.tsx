@@ -38,6 +38,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { createProductActions } from "@/actions/product.action";
+import { getBrandByOwnerIdActions } from "@/actions/brand.action";
 
 const AddProductForm = ({
   categories,
@@ -62,7 +63,7 @@ const AddProductForm = ({
       image: undefined,
       categoryId: "",
     },
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const onSubmit = async (
@@ -72,6 +73,11 @@ const AddProductForm = ({
     setLoading(true);
 
     try {
+      const brand = await getBrandByOwnerIdActions(userId);
+
+      if (!brand) {
+        throw new Error("Brand not found for this user");
+      }
       await createProductActions({
         name: values.name,
         description: values.description,
@@ -79,7 +85,7 @@ const AddProductForm = ({
         imageUrl: "",
         quantity: 2,
         categoryId: values.categoryId,
-        brandId: userId,
+        brandId: brand.id,
       });
 
       console.log("Form submitted successfully");
