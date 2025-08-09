@@ -28,3 +28,9 @@ export interface IBrand {
     logoUrl: string;
     ownerId: string;
 }
+
+export interface MobileNavItemProps {
+    href: string;
+    text: string;
+    onClick: () => void;
+}

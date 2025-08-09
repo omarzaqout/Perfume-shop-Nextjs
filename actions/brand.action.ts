@@ -13,6 +13,8 @@ export const getBrandListActions = async () => {
         orderBy: {
             name: "desc",
         },
+
+
     });
 };
 
