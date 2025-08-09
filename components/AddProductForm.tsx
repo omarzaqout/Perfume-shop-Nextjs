@@ -62,6 +62,7 @@ const AddProductForm = ({
       image: undefined,
       categoryId: "",
     },
+    mode: "onChange"
   });
 
   const onSubmit = async (
