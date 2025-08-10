@@ -26,7 +26,7 @@ export default function AppBar() {
                 alt="Perfume Shop Logo"
                 width={44}
                 height={44}
-                className="cursor-pointer dark:invert"
+                className="cursor-pointer"
               />
               <span className="hidden sm:block text-lg font-semibold text-foreground">
                 {t("storeName")}

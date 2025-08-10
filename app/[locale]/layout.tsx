@@ -42,11 +42,12 @@ export default async function RootLayout({
   }
 
   const messages = await getMessages({ locale });
+  const isRTL = locale === "ar"; // <-- هنا
 
   return (
     <html
       lang={locale}
-      dir={locale === "ar" ? "rtl" : "ltr"}
+      dir={isRTL ? "rtl" : "ltr"}
       suppressHydrationWarning
       className="h-full"
     >
@@ -66,9 +67,12 @@ export default async function RootLayout({
                 <div className="flex flex-col h-screen w-full">
                   <AppBar />
                   <div className="flex flex-1 overflow-hidden">
-                    <div className="hidden md:flex w-64 flex-shrink-0">
+                    <Sidebar
+                      side={isRTL ? "right" : "left"}
+                      className="pt-15 hidden md:flex w-64 flex-shrink-0"
+                    >
                       <PerfumeSidebar />
-                    </div>
+                    </Sidebar>
 
                     <main className="flex-1 overflow-y-auto bg-gradient-to-b from-purple-50 to-white p-4 md:p-8">
                       <div className="max-w-7xl mx-auto">{children}</div>
