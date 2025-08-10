@@ -17,7 +17,6 @@ export default function AppBar() {
   return (
     <header className="sticky top-0 w-full shadow-md bg-background transition-colors z-50">
       <div className="container mx-auto px-4">
-        {/* الصف العلوي */}
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-4">
             <SidebarTrigger />
@@ -35,7 +34,6 @@ export default function AppBar() {
             </Link>
           </div>
 
-          {/* روابط التنقل على الديسكتوب */}
           <div className="hidden md:flex items-center gap-8">
             <Link
               href="/shop"
@@ -51,7 +49,6 @@ export default function AppBar() {
             </Link>
           </div>
 
-          {/* عناصر اليمين */}
           <div className="flex items-center gap-4">
             <SignedIn>
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-transparent hover:bg-brand hover:text-brand-foreground transition-colors">
@@ -80,7 +77,6 @@ export default function AppBar() {
 
             <ModeToggle />
 
-            {/* زر القائمة في الموبايل */}
             <button
               className="md:hidden text-foreground ml-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -91,7 +87,6 @@ export default function AppBar() {
           </div>
         </div>
 
-        {/* القائمة المنسدلة في الموبايل */}
         {isMenuOpen && (
           <div className="md:hidden bg-background border-t border-border shadow-lg z-40">
             <div className="flex flex-col py-4 px-6 gap-5">

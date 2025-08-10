@@ -1,23 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/NavBar";
-import { ThemeProvider } from "@/provider/theme-provider";
-import { ModeToggle } from "@/components/TogleMode";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
+
+import { ThemeProvider } from "@/provider/theme-provider";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { ClerkProvider } from "@clerk/nextjs";
-import Nav from "@/components/nav";
 
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarFooter,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar } from "@/components/ui/sidebar";
 import AppBar from "@/components/AppBar";
 import PerfumeSidebar from "@/components/PerfumeSidebar";
 
@@ -32,7 +24,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "متجر العطور الفاخرة",
+  title: "Perfume Store",
   description: "اختيارك الأول للعطور الأصلية الفاخرة",
 };
 
@@ -44,9 +36,12 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  const messages = await getMessages({ locale });
 
   return (
     <html
@@ -57,6 +52,7 @@ export default async function RootLayout({
     >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
+        suppressHydrationWarning
       >
         <ClerkProvider>
           <ThemeProvider
@@ -65,14 +61,14 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <NextIntlClientProvider>
+            <NextIntlClientProvider locale={locale} messages={messages}>
               <SidebarProvider>
                 <div className="flex flex-col h-screen w-full">
                   <AppBar />
                   <div className="flex flex-1 overflow-hidden">
-                    <Sidebar className="pt-15 hidden md:flex w-64 flex-shrink-0">
+                    <div className="hidden md:flex w-64 flex-shrink-0">
                       <PerfumeSidebar />
-                    </Sidebar>
+                    </div>
 
                     <main className="flex-1 overflow-y-auto bg-gradient-to-b from-purple-50 to-white p-4 md:p-8">
                       <div className="max-w-7xl mx-auto">{children}</div>
