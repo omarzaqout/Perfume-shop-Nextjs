@@ -4,196 +4,135 @@ import { Link } from "@/i18n/navigation";
 import {
   Home,
   ShoppingBag,
-  Tag,
   ShoppingCart,
   User,
-  Search,
-  ChevronDown,
-  ChevronUp,
   Star,
-  Gift,
   Heart,
   Gem,
-  SprayCan,
-  Flower,
-  Leaf,
-  Sparkles,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
-import { IBrand, ICategory } from "@/interfaces";
+import { ICategory } from "@/interfaces";
+import { useTranslations } from "next-intl"; // <-- 1. استيراد Hook الترجمة
+
+interface Brand {
+  name: string;
+  id: string;
+}
 
 const ContentSidebar = ({
   categories,
   brands,
 }: {
   categories: ICategory[];
-  brands: { name: string; id: string }[];
+  brands: Brand[];
 }) => {
+  const t = useTranslations("Sidebar"); // <-- 2. تهيئة Hook الترجمة
+
   const [openCategories, setOpenCategories] = useState(true);
   const [openBrands, setOpenBrands] = useState(true);
 
+  // 3. تعريف مصفوفة الروابط هنا لتتمكن من الوصول للمتغير 't'
   const mainItems = [
-    { title: "الرئيسية", url: "/", icon: Home, color: "text-amber-500" },
-    { title: "السلة", url: "/cart", icon: ShoppingCart, color: "text-sky-400" },
-    { title: "حسابي", url: "/account", icon: User, color: "text-violet-400" },
-    { title: "بحث", url: "/search", icon: Search, color: "text-amber-300" },
+    { title: t('home'), url: "/", icon: Home },
+    { title: t('cart'), url: "/cart", icon: ShoppingCart },
+    { title: t('account'), url: "/account", icon: User },
+    { title: t('favorites'), url: "/favorites", icon: Heart },
+    { title: t('bestsellers'), url: "/bestsellers", icon: Star },
   ];
-
-  const collections = [
-    {
-      title: "المفضلة",
-      url: "/favorites",
-      icon: Heart,
-      color: "text-rose-500",
-    },
-    {
-      title: "أفضل المبيعات",
-      url: "/bestsellers",
-      icon: Star,
-      color: "text-amber-400",
-    },
-    { title: "هدايا", url: "/gifts", icon: Gift, color: "text-emerald-500" },
-  ];
-
+  
   return (
-    <div className="w-full h-full bg-gradient-to-b from-purple-900 to-purple-800 text-white flex flex-col shadow-2xl">
-      <div className="p-6 pb-4 border-b border-purple-700">
-        <div className="flex items-center justify-center mb-4">
-          <div className="bg-gradient-to-r from-amber-400 to-amber-600 w-14 h-14 rounded-full flex items-center justify-center">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-              <div className="w-8 h-8 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full"></div>
-            </div>
+    <div className="w-full h-full bg-card text-foreground flex flex-col">
+      {/* --- الهيدر --- */}
+      <div className="p-5 border-b border-border">
+        <Link href="/" className="flex items-center gap-4 group">
+          <div className="bg-primary w-12 h-12 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110">
+            <Gem size={24} className="text-primary-foreground" />
           </div>
-        </div>
-        <h1 className="text-2xl font-bold text-center text-amber-300 font-serif tracking-wide">
-          متجر العطور الفاخرة
-        </h1>
-        <p className="text-xs text-center text-purple-200 mt-1">
-          اختيارات مميزة لعطور لا تُنسى
-        </p>
+          <div>
+            {/* 4. استخدام الترجمة هنا */}
+            <h1 className="text-lg font-bold text-primary tracking-wide">
+              {t('storeName')}
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              {t('tagline')}
+            </p>
+          </div>
+        </Link>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-5 px-3">
-        <div className="space-y-1 mb-6">
+      {/* --- المحتوى --- */}
+      <div className="flex-1 overflow-y-auto p-3 scroll-hide">
+        {/* --- الروابط الرئيسية --- */}
+        <div className="space-y-1 py-2">
           {mainItems.map((item) => (
             <Link
               key={item.title}
               href={item.url}
-              className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 hover:bg-purple-700 hover:shadow-lg hover:translate-x-1 group"
+              className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
             >
-              <div
-                className={`${item.color} group-hover:text-amber-300 transition-colors`}
-              >
-                <item.icon size={20} />
-              </div>
-              <span className="text-base group-hover:text-amber-300 transition-colors">
-                {item.title}
+              <item.icon size={20} className="text-muted-foreground group-hover:text-inherit transition-colors" />
+              <span className="font-medium text-inherit">
+                {item.title} {/* العنوان أصبح مترجماً */}
               </span>
             </Link>
           ))}
         </div>
-        <div className="mb-6">
-          <div
-            className="flex items-center justify-between p-4 cursor-pointer rounded-xl hover:bg-purple-700 transition-colors"
-            onClick={() => setOpenCategories(!openCategories)}
-          >
-            <h3 className="text-base font-semibold text-amber-300 flex items-center gap-2">
-              <ShoppingBag size={18} />
-              التصنيفات
-            </h3>
-            {openCategories ? (
-              <ChevronUp size={18} />
-            ) : (
-              <ChevronDown size={18} />
-            )}
-          </div>
 
-          {openCategories && (
-            <div className="mt-2 space-y-2 pl-6">
-              {categories.map((category, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 rounded-lg hover:bg-purple-700/50 transition-colors group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="text-purple-300 group-hover:text-amber-300 transition-colors"></div>
-                      <span className="text-sm group-hover:text-amber-300 transition-colors">
-                        {category.name}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <div className="mb-6">
-          <div
-            className="flex items-center justify-between p-4 cursor-pointer rounded-xl hover:bg-purple-700 transition-colors"
-            onClick={() => setOpenBrands(!openBrands)}
-          >
-            <h3 className="text-base font-semibold text-amber-300 flex items-center gap-2">
-              <Star size={18} />
-              العلامات التجارية
-            </h3>
-            {openBrands ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-          </div>
-
-          {openBrands && (
-            <div className="mt-2 space-y-2 pl-6">
-              {brands.map((brand, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-purple-700/50 transition-colors group cursor-pointer"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm group-hover:text-amber-300 transition-colors">
-                      {brand.name}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-sm font-semibold text-purple-300 mb-3 px-3">
-            المجموعات المميزة
-          </h3>
-          {collections.map((item) => (
+        {/* --- الأقسام القابلة للطي --- */}
+        <CollapsibleSection title={t('categories')} icon={ShoppingBag} isOpen={openCategories} setIsOpen={setOpenCategories}>
+          {categories.map((category) => (
             <Link
-              key={item.title}
-              href={item.url}
-              className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 hover:bg-purple-700 hover:shadow-lg hover:translate-x-1 group"
+              key={category.id}
+              href={`/category/${category.id}`}
+              className="block p-2 rounded-md text-muted-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors text-sm"
             >
-              <div
-                className={`${item.color} group-hover:text-amber-300 transition-colors`}
-              >
-                <item.icon size={20} />
-              </div>
-              <span className="text-base group-hover:text-amber-300 transition-colors">
-                {item.title}
-              </span>
+              {category.name}
             </Link>
           ))}
-        </div>
+        </CollapsibleSection>
+        
+        <CollapsibleSection title={t('brands')} icon={Star} isOpen={openBrands} setIsOpen={setOpenBrands}>
+           {brands.map((brand) => (
+              <Link
+                key={brand.id}
+                href={`/brand/${brand.id}`}
+                className="block p-2 rounded-md text-muted-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors text-sm"
+              >
+                {brand.name}
+              </Link>
+            ))}
+        </CollapsibleSection>
       </div>
 
-      <div className="p-4 border-t border-purple-700">
-        <div className="flex items-center justify-center">
-          <div className="flex space-x-1">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="w-1 h-1 rounded-full bg-purple-400"></div>
-            ))}
-          </div>
-        </div>
-        <p className="text-xs text-center text-purple-300 mt-2">
-          © 2023 جميع الحقوق محفوظة.
+      {/* --- الفوتر --- */}
+      <div className="p-4 border-t border-border mt-auto">
+        <p className="text-xs text-center text-muted-foreground">
+          {t('footer')}
         </p>
       </div>
     </div>
   );
 };
+
+const CollapsibleSection = ({ title, icon: Icon, isOpen, setIsOpen, children }: any) => (
+  <div className="py-2 border-t border-border">
+    <button
+      className="w-full flex items-center justify-between p-3 cursor-pointer rounded-lg hover:bg-accent/50 transition-colors"
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <h3 className="font-semibold text-foreground flex items-center gap-3">
+        <Icon size={18} className="text-primary"/>
+        {title}
+      </h3>
+      {isOpen ? <ChevronUp size={18} className="text-muted-foreground"/> : <ChevronDown size={18} className="text-muted-foreground"/>}
+    </button>
+    {isOpen && (
+      <div className="mt-1 space-y-1 pr-6">
+        {children}
+      </div>
+    )}
+  </div>
+);
 
 export default ContentSidebar;

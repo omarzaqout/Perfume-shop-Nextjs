@@ -9,7 +9,11 @@ import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { ClerkProvider } from "@clerk/nextjs";
 
-import { SidebarProvider, Sidebar } from "@/components/ui/sidebar";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import AppBar from "@/components/AppBar";
 import PerfumeSidebar from "@/components/PerfumeSidebar";
 
@@ -52,7 +56,7 @@ export default async function RootLayout({
       className="h-full"
     >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full `}
         suppressHydrationWarning
       >
         <ClerkProvider>
@@ -74,8 +78,12 @@ export default async function RootLayout({
                       <PerfumeSidebar />
                     </Sidebar>
 
-                    <main className="flex-1 overflow-y-auto bg-gradient-to-b from-purple-50 to-white p-4 md:p-8">
-                      <div className="max-w-7xl mx-auto">{children}</div>
+                    <main className=" bg-background flex overflow-y-auto bg-gradient-to-b ">
+                      <SidebarTrigger className="p-2 m-3 rounded-lg hover:bg-accent"/>
+
+                      <div className="max-w-7xl mx-auto p-4 md:p-8">
+                        {children}
+                      </div>
                     </main>
                   </div>
                 </div>

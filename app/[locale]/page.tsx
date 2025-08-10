@@ -26,7 +26,6 @@ export default async function HomePage() {
 
   return (
     <div>
-      <h1>{t("title")}</h1>
       <AddProductForm categories={categories} userId={safeUserId} />
       <AddBrandForm userId={safeUserId} />
     </div>
