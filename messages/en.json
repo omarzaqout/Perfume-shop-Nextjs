@@ -14,5 +14,17 @@
     "changeLanguage": "Change Language",
     "openMenu": "Open Menu",
     "closeMenu": "Close Menu"
+  },
+   "Sidebar": {
+    "storeName": "Perfume Store",
+    "tagline": "Unforgettable Selections",
+    "home": "Home",
+    "cart": "Cart",
+    "account": "My Account",
+    "favorites": "Favorites",
+    "bestsellers": "Bestsellers",
+    "categories": "Categories",
+    "brands": "Brands",
+    "footer": "© 2025 Perfume Store. All rights reserved."
   }
 }
