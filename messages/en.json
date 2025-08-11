@@ -4,6 +4,7 @@
     "about": "Go to the About page"
   },
   "AppBar": {
+    "searchPlaceholder": "Search for your perfume...",
     "storeName": "Perfume Store",
     "shop": "Shop",
     "about": "About",
@@ -26,5 +27,12 @@
     "categories": "Categories",
     "brands": "Brands",
     "footer": "© 2025 Perfume Store. All rights reserved."
+  },
+  "BottomBar": {
+    "home": "Home",
+    "categories": "Categories",
+    "discover": "Discover",
+    "cart": "Cart",
+    "account": "Account"
   }
 }

@@ -5,6 +5,7 @@ import { getCategoryListActions } from "@/actions/category.action";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { createUserAction } from "@/actions/user.action";
 import AddBrandForm from "@/components/AddBrandForm";
+import SimpleBottomNavigation from "@/components/ButtomBar";
 
 export default async function HomePage() {
   const t = await getTranslations("HomePage");
@@ -28,6 +29,7 @@ export default async function HomePage() {
     <div>
       <AddProductForm categories={categories} userId={safeUserId} />
       <AddBrandForm userId={safeUserId} />
+      <SimpleBottomNavigation/>
     </div>
   );
 }
