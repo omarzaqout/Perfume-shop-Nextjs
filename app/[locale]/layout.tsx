@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import AppBar from "@/components/AppBar";
 import PerfumeSidebar from "@/components/PerfumeSidebar";
+import SearchBar from "@/components/SearchBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -78,10 +79,15 @@ export default async function RootLayout({
                       <PerfumeSidebar />
                     </Sidebar>
 
-                    <main className=" bg-background flex overflow-y-auto bg-gradient-to-b ">
-                      <SidebarTrigger className="p-2 m-3 rounded-lg hover:bg-accent"/>
+                    <main className=" bg-background flex flex-col  mt-3 w-full p-5">
+                      <div className="flex">
+                        <SidebarTrigger className="p-2 m-2 rounded-lg hover:bg-accent" />
+                        <div className="w-full">
+                          <SearchBar />
+                        </div>
+                      </div>
 
-                      <div className="max-w-7xl mx-auto p-4 md:p-8">
+                      <div className="p-5 mt-6 w-full h-screen overflow-y-auto scrollbar-hide">
                         {children}
                       </div>
                     </main>
