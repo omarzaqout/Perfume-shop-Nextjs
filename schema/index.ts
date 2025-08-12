@@ -18,7 +18,7 @@ export const productFormSchema = z.object({
   quantity: z.coerce.number().min(1, {
     message: "Quantity must be at least 1.",
   }),
-  image: z.instanceof(File).optional(),
+  image: z.instanceof(File),
 
   categoryId: z
     .string()

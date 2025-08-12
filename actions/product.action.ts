@@ -19,8 +19,16 @@ export const getProductListActions = async (searchTerm?: string) => {
         orderBy: {
             name: "desc",
         },
+        include: {
+            brand: {
+                select: {
+                    name: true,
+                },
+            },
+        },
     });
 };
+
 
 export const createProductActions = async ({
     name,

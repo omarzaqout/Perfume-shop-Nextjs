@@ -69,36 +69,47 @@ const AddProductForm = ({
   const onSubmit = async (
     values: z.infer<typeof productFormSchema>
   ): Promise<void> => {
-    console.log("Form submitted", values);
     setLoading(true);
 
     try {
+      let imageUrl = "";
+
+      if (values.image) {
+        const formData = new FormData();
+        formData.append("image", values.image);
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || "Failed to upload image");
+
+        imageUrl = data.url;
+      }
+
       const brand = await getBrandByOwnerIdActions(userId);
 
-      if (!brand) {
-        throw new Error("Brand not found for this user");
-      }
+      if (!brand) throw new Error("Brand not found");
+
       await createProductActions({
         name: values.name,
         description: values.description,
-        price: 20,
-        imageUrl: "",
-        quantity: 2,
+        price: values.price || 20,
+        imageUrl,
+        quantity: values.quantity || 1,
         categoryId: values.categoryId,
         brandId: brand.id,
       });
 
-      console.log("Form submitted successfully");
       setIsclose(false);
     } catch (error) {
-      console.error("❌ Error submitting form:", error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const nn = () => {
-    console.log("nn called");
   };
 
   return (

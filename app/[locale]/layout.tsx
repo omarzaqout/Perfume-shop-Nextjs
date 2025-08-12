@@ -79,15 +79,15 @@ export default async function RootLayout({
                       <PerfumeSidebar />
                     </Sidebar>
 
-                    <main className=" bg-background flex flex-col  mt-3 w-full p-5">
-                      <div className="flex">
+                    <main className=" bg-background flex flex-col  mt-3 w-full p-1 sm:p-5">
+                      <div className="flex p-1 sm:p-0">
                         <SidebarTrigger className="p-2 m-2 rounded-lg hover:bg-accent" />
                         <div className="w-full">
                           <SearchBar />
                         </div>
                       </div>
 
-                      <div className="p-5 mt-6 w-full h-screen overflow-y-auto scrollbar-hide">
+                      <div className="p-5 sm:mt-6 mt-1 w-full h-screen overflow-y-auto scrollbar-hide">
                         {children}
                       </div>
                     </main>

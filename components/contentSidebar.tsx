@@ -27,20 +27,19 @@ const ContentSidebar = ({
   categories: ICategory[];
   brands: Brand[];
 }) => {
-  const t = useTranslations("Sidebar"); // <-- 2. تهيئة Hook الترجمة
+  const t = useTranslations("Sidebar");
 
   const [openCategories, setOpenCategories] = useState(true);
   const [openBrands, setOpenBrands] = useState(true);
 
-  // 3. تعريف مصفوفة الروابط هنا لتتمكن من الوصول للمتغير 't'
   const mainItems = [
-    { title: t('home'), url: "/", icon: Home },
-    { title: t('cart'), url: "/cart", icon: ShoppingCart },
-    { title: t('account'), url: "/account", icon: User },
-    { title: t('favorites'), url: "/favorites", icon: Heart },
-    { title: t('bestsellers'), url: "/bestsellers", icon: Star },
+    { title: t("home"), url: "/", icon: Home },
+    { title: t("cart"), url: "/cart", icon: ShoppingCart },
+    { title: t("account"), url: "/account", icon: User },
+    { title: t("favorites"), url: "/favorites", icon: Heart },
+    { title: t("bestsellers"), url: "/bestsellers", icon: Star },
   ];
-  
+
   return (
     <div className="w-full h-full bg-card text-foreground flex flex-col">
       {/* --- الهيدر --- */}
@@ -52,11 +51,9 @@ const ContentSidebar = ({
           <div>
             {/* 4. استخدام الترجمة هنا */}
             <h1 className="text-lg font-bold text-primary tracking-wide">
-              {t('storeName')}
+              {t("storeName")}
             </h1>
-            <p className="text-xs text-muted-foreground">
-              {t('tagline')}
-            </p>
+            <p className="text-xs text-muted-foreground">{t("tagline")}</p>
           </div>
         </Link>
       </div>
@@ -71,7 +68,10 @@ const ContentSidebar = ({
               href={item.url}
               className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
             >
-              <item.icon size={20} className="text-muted-foreground group-hover:text-inherit transition-colors" />
+              <item.icon
+                size={20}
+                className="text-muted-foreground group-hover:text-inherit transition-colors"
+              />
               <span className="font-medium text-inherit">
                 {item.title} {/* العنوان أصبح مترجماً */}
               </span>
@@ -80,7 +80,12 @@ const ContentSidebar = ({
         </div>
 
         {/* --- الأقسام القابلة للطي --- */}
-        <CollapsibleSection title={t('categories')} icon={ShoppingBag} isOpen={openCategories} setIsOpen={setOpenCategories}>
+        <CollapsibleSection
+          title={t("categories")}
+          icon={ShoppingBag}
+          isOpen={openCategories}
+          setIsOpen={setOpenCategories}
+        >
           {categories.map((category) => (
             <Link
               key={category.id}
@@ -91,47 +96,58 @@ const ContentSidebar = ({
             </Link>
           ))}
         </CollapsibleSection>
-        
-        <CollapsibleSection title={t('brands')} icon={Star} isOpen={openBrands} setIsOpen={setOpenBrands}>
-           {brands.map((brand) => (
-              <Link
-                key={brand.id}
-                href={`/brand/${brand.id}`}
-                className="block p-2 rounded-md text-muted-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors text-sm"
-              >
-                {brand.name}
-              </Link>
-            ))}
+
+        <CollapsibleSection
+          title={t("brands")}
+          icon={Star}
+          isOpen={openBrands}
+          setIsOpen={setOpenBrands}
+        >
+          {brands.map((brand) => (
+            <Link
+              key={brand.id}
+              href={`/brand/${brand.id}`}
+              className="block p-2 rounded-md text-muted-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors text-sm"
+            >
+              {brand.name}
+            </Link>
+          ))}
         </CollapsibleSection>
       </div>
 
       {/* --- الفوتر --- */}
       <div className="p-4 border-t border-border mt-auto">
         <p className="text-xs text-center text-muted-foreground">
-          {t('footer')}
+          {t("footer")}
         </p>
       </div>
     </div>
   );
 };
 
-const CollapsibleSection = ({ title, icon: Icon, isOpen, setIsOpen, children }: any) => (
+const CollapsibleSection = ({
+  title,
+  icon: Icon,
+  isOpen,
+  setIsOpen,
+  children,
+}: any) => (
   <div className="py-2 border-t border-border">
     <button
       className="w-full flex items-center justify-between p-3 cursor-pointer rounded-lg hover:bg-accent/50 transition-colors"
       onClick={() => setIsOpen(!isOpen)}
     >
       <h3 className="font-semibold text-foreground flex items-center gap-3">
-        <Icon size={18} className="text-primary"/>
+        <Icon size={18} className="text-primary" />
         {title}
       </h3>
-      {isOpen ? <ChevronUp size={18} className="text-muted-foreground"/> : <ChevronDown size={18} className="text-muted-foreground"/>}
+      {isOpen ? (
+        <ChevronUp size={18} className="text-muted-foreground" />
+      ) : (
+        <ChevronDown size={18} className="text-muted-foreground" />
+      )}
     </button>
-    {isOpen && (
-      <div className="mt-1 space-y-1 pr-6">
-        {children}
-      </div>
-    )}
+    {isOpen && <div className="mt-1 space-y-1 pr-6">{children}</div>}
   </div>
 );
 
