@@ -1,7 +1,18 @@
 {
   "HomePage": {
     "title": "Hello World",
-    "about": "Go to the About page"
+    "about": "Go to the About page",
+    "heroTitle": "Discover Your Essence",
+    "heroSubtitle": "Our exclusive collection of luxury perfumes, designed for you.",
+    "shopNow": "Shop Now",
+    "featuredProducts": "Carefully Selected Products",
+    "adminPanelTitle": "Admin Control Panel",
+
+    "heroSlide2": {
+      "title": "Summer Collection",
+      "subtitle": "Refreshing and vibrant scents for sunny days.",
+      "buttonText": "Explore Now"
+    }
   },
   "AppBar": {
     "searchPlaceholder": "Search for your perfume...",
@@ -14,9 +25,10 @@
     "toggleTheme": "Toggle Theme",
     "changeLanguage": "Change Language",
     "openMenu": "Open Menu",
-    "closeMenu": "Close Menu"
+    "closeMenu": "Close Menu",
+     "premium": "Premium"
   },
-   "Sidebar": {
+  "Sidebar": {
     "storeName": "Perfume Store",
     "tagline": "Unforgettable Selections",
     "home": "Home",
