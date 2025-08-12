@@ -8,6 +8,7 @@ export interface ICategory {
 }
 
 export interface IProduct {
+    id: string;
     name: string;
     description: string;
     price: number;
@@ -15,6 +16,11 @@ export interface IProduct {
     quantity: number;
     categoryId: string;
     brandId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    brand: {
+        name: string;
+    };
 }
 
 export interface IUser {

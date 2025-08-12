@@ -8,6 +8,8 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { ClerkProvider } from "@clerk/nextjs";
+import SimpleBottomNavigation from "@/components/ButtomBar";
+
 
 import {
   SidebarProvider,
@@ -94,6 +96,7 @@ export default async function RootLayout({
                   </div>
                 </div>
               </SidebarProvider>
+              <SimpleBottomNavigation/>
             </NextIntlClientProvider>
           </ThemeProvider>
         </ClerkProvider>

@@ -1,7 +1,18 @@
 {
   "HomePage": {
     "title": "مرحبا بالعالم",
-    "about": "الذهاب الى صفحة من نحن"
+    "about": "الذهاب الى صفحة من نحن",
+    "heroTitle": "اكتشف جوهرك",
+    "heroSubtitle": "مجموعتنا الحصرية من العطور الفاخرة المصممة لك.",
+    "shopNow": "تسوق الآن",
+    "featuredProducts": "منتجات مختارة بعناية",
+    "adminPanelTitle": "لوحة تحكم المشرف",
+
+    "heroSlide2": {
+      "title": "مجموعة الصيف",
+      "subtitle": "عطور منعشة وحيوية للأيام المشمسة.",
+      "buttonText": "استكشف الآن"
+    }
   },
   "AppBar": {
     "searchPlaceholder": "ابحث عن عطرك...",
@@ -14,9 +25,11 @@
     "toggleTheme": "تبديل الثيم",
     "changeLanguage": "تغيير اللغة",
     "openMenu": "فتح القائمة",
-    "closeMenu": "إغلاق القائمة"
+    "closeMenu": "إغلاق القائمة",
+     "premium": "العضوية المميزة"
+
   },
-    "Sidebar": {
+  "Sidebar": {
     "storeName": "متجر العطور",
     "tagline": "اختيارات لا تُنسى",
     "home": "الرئيسية",
@@ -35,5 +48,4 @@
     "cart": "السلة",
     "account": "حسابي"
   }
-
 }
