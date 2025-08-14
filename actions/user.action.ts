@@ -6,21 +6,7 @@ import { IUser } from "@/interfaces";
 
 const prisma = new PrismaClient();
 
-// export const getProductListActions = async (searchTerm?: string) => {
-//     return await prisma.product.findMany({
-//         where: searchTerm
-//             ? {
-//                 name: {
-//                     contains: searchTerm,
-//                     mode: "insensitive",
-//                 },
-//             }
-//             : {},
-//         orderBy: {
-//             name: "desc",
-//         },
-//     });
-// };
+
 export async function createUserAction({ id, email, name }: IUser) {
     if (!id || !email) return;
 
@@ -31,4 +17,10 @@ export async function createUserAction({ id, email, name }: IUser) {
         data: { id, email, name, role: "CLIENT", },
     });
     revalidatePath("/");
+}
+
+export async function getUserByIdAction(id: string) {
+    return await prisma.user.findUnique({
+        where: { id },
+    });
 }

@@ -8,8 +8,6 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { ClerkProvider } from "@clerk/nextjs";
-import SimpleBottomNavigation from "@/components/ButtomBar";
-
 
 import {
   SidebarProvider,
@@ -19,6 +17,7 @@ import {
 import AppBar from "@/components/AppBar";
 import PerfumeSidebar from "@/components/PerfumeSidebar";
 import SearchBar from "@/components/SearchBar";
+import { SearchProvider } from "@/context/SearchContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,7 +48,7 @@ export default async function RootLayout({
   }
 
   const messages = await getMessages({ locale });
-  const isRTL = locale === "ar"; // <-- هنا
+  const isRTL = locale === "ar";
 
   return (
     <html
@@ -71,32 +70,34 @@ export default async function RootLayout({
           >
             <NextIntlClientProvider locale={locale} messages={messages}>
               <SidebarProvider>
-                <div className="flex flex-col h-screen w-full">
-                  <AppBar />
-                  <div className="flex flex-1 overflow-hidden">
-                    <Sidebar
-                      side={isRTL ? "right" : "left"}
-                      className="pt-15 hidden md:flex w-64 flex-shrink-0"
-                    >
-                      <PerfumeSidebar />
-                    </Sidebar>
+                <SearchProvider>
+                  {" "}
+                  <div className="flex flex-col h-screen w-full">
+                    <AppBar />
+                    <div className="flex flex-1 overflow-hidden">
+                      <Sidebar
+                        side={isRTL ? "right" : "left"}
+                        className="pt-15 hidden md:flex w-64 flex-shrink-0"
+                      >
+                        <PerfumeSidebar />
+                      </Sidebar>
 
-                    <main className=" bg-background flex flex-col  mt-3 w-full p-1 sm:p-5">
-                      <div className="flex p-1 sm:p-0">
-                        <SidebarTrigger className="p-2 m-2 rounded-lg hover:bg-accent" />
-                        <div className="w-full">
-                          <SearchBar />
+                      <main className="bg-background flex flex-col mt-3 w-full p-1 sm:p-5">
+                        <div className="flex p-1 sm:p-0">
+                          <SidebarTrigger className="p-2 m-2 rounded-lg hover:bg-accent" />
+                          <div className="w-full">
+                            <SearchBar />
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="p-5 sm:mt-6 mt-1 w-full h-screen overflow-y-auto scrollbar-hide">
-                        {children}
-                      </div>
-                    </main>
+                        <div className="p-5 sm:mt-6 mt-1 w-full h-screen overflow-y-auto scrollbar-hide">
+                          {children}
+                        </div>
+                      </main>
+                    </div>
                   </div>
-                </div>
+                </SearchProvider>
               </SidebarProvider>
-              <SimpleBottomNavigation/>
             </NextIntlClientProvider>
           </ThemeProvider>
         </ClerkProvider>

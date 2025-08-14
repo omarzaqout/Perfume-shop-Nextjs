@@ -18,6 +18,7 @@ import { useTranslations } from "next-intl"; // <-- 1. استيراد Hook ال�
 interface Brand {
   name: string;
   id: string;
+  logoUrl?: string | null;
 }
 
 const ContentSidebar = ({
@@ -42,14 +43,12 @@ const ContentSidebar = ({
 
   return (
     <div className="w-full h-full bg-card text-foreground flex flex-col">
-      {/* --- الهيدر --- */}
       <div className="p-5 border-b border-border">
         <Link href="/" className="flex items-center gap-4 group">
           <div className="bg-primary w-12 h-12 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110">
             <Gem size={24} className="text-primary-foreground" />
           </div>
           <div>
-            {/* 4. استخدام الترجمة هنا */}
             <h1 className="text-lg font-bold text-primary tracking-wide">
               {t("storeName")}
             </h1>
@@ -58,9 +57,7 @@ const ContentSidebar = ({
         </Link>
       </div>
 
-      {/* --- المحتوى --- */}
       <div className="flex-1 overflow-y-auto p-3 scroll-hide">
-        {/* --- الروابط الرئيسية --- */}
         <div className="space-y-1 py-2">
           {mainItems.map((item) => (
             <Link
@@ -72,14 +69,11 @@ const ContentSidebar = ({
                 size={20}
                 className="text-muted-foreground group-hover:text-inherit transition-colors"
               />
-              <span className="font-medium text-inherit">
-                {item.title} {/* العنوان أصبح مترجماً */}
-              </span>
+              <span className="font-medium text-inherit">{item.title}</span>
             </Link>
           ))}
         </div>
 
-        {/* --- الأقسام القابلة للطي --- */}
         <CollapsibleSection
           title={t("categories")}
           icon={ShoppingBag}
@@ -107,15 +101,25 @@ const ContentSidebar = ({
             <Link
               key={brand.id}
               href={`/brand/${brand.id}`}
-              className="block p-2 rounded-md text-muted-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors text-sm"
+              className="flex items-center gap-2 p-2 rounded-md text-muted-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors text-sm"
             >
-              {brand.name}
+              {brand.logoUrl ? (
+                <img
+                  src={brand.logoUrl}
+                  alt={brand.name}
+                  className="w-6 h-6 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-600">
+                  {brand.name[0]}
+                </div>
+              )}
+              <span>{brand.name}</span>
             </Link>
           ))}
         </CollapsibleSection>
       </div>
 
-      {/* --- الفوتر --- */}
       <div className="p-4 border-t border-border mt-auto">
         <p className="text-xs text-center text-muted-foreground">
           {t("footer")}

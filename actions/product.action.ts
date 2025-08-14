@@ -6,7 +6,7 @@ import { IProduct } from "@/interfaces";
 
 const prisma = new PrismaClient();
 
-export const getProductListActions = async (searchTerm?: string) => {
+export async function getProductListActions(searchTerm?: string, skip = 0, take = 10) {
     return await prisma.product.findMany({
         where: searchTerm
             ? {
@@ -19,6 +19,8 @@ export const getProductListActions = async (searchTerm?: string) => {
         orderBy: {
             name: "desc",
         },
+        skip,
+        take,
         include: {
             brand: {
                 select: {
@@ -27,7 +29,7 @@ export const getProductListActions = async (searchTerm?: string) => {
             },
         },
     });
-};
+}
 
 
 export const createProductActions = async ({
