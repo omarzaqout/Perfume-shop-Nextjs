@@ -23,7 +23,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,13 +35,11 @@ const AddBrandForm = ({ userId }: { userId: string | "" }) => {
   const [loading, setLoading] = useState(false);
   const [Isclose, setIsclose] = useState(false);
 
-  console.log("User ID:", userId);
-
   const form = useForm({
     resolver: zodResolver(brandFormSchema),
     defaultValues: {
       name: "",
-      logoUrl: "",
+      image: undefined,
     },
   });
 
@@ -53,9 +50,26 @@ const AddBrandForm = ({ userId }: { userId: string | "" }) => {
     setLoading(true);
 
     try {
+      let logoUrl = "";
+
+      if (values.image) {
+        const formData = new FormData();
+        formData.append("image", values.image);
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || "Failed to upload image");
+
+        logoUrl = data.url;
+      }
       await createBrandActions({
         name: values.name,
-        logoUrl: values.logoUrl,
+        logoUrl,
         ownerId: userId,
       });
 
@@ -66,10 +80,6 @@ const AddBrandForm = ({ userId }: { userId: string | "" }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const nn = () => {
-    console.log("nn called");
   };
 
   return (
@@ -104,15 +114,17 @@ const AddBrandForm = ({ userId }: { userId: string | "" }) => {
 
               <FormField
                 control={form.control}
-                name="logoUrl"
-                render={({ field }) => (
+                name="image"
+                render={({ field: { onChange, ref, ...rest } }) => (
                   <FormItem>
-                    <FormLabel>Logo URL</FormLabel>
+                    <FormLabel>Product Image</FormLabel>
                     <FormControl>
                       <Input
-                        type="url"
-                        placeholder="https://example.com/logo.png"
-                        {...field}
+                        type="file"
+                        accept="image/*"
+                        ref={ref}
+                        onChange={(e) => onChange(e.target.files?.[0])}
+                        // Do not spread rest here to avoid passing value prop
                       />
                     </FormControl>
                     <FormMessage />

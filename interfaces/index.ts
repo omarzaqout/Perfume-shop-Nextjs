@@ -1,5 +1,3 @@
-
-
 export interface ICategory {
 
     id: string;
@@ -8,7 +6,6 @@ export interface ICategory {
 }
 
 export interface IProduct {
-    id: string;
     name: string;
     description: string;
     price: number;
@@ -16,11 +13,6 @@ export interface IProduct {
     quantity: number;
     categoryId: string;
     brandId: string;
-    createdAt: Date;
-    updatedAt: Date;
-    brand: {
-        name: string;
-    };
 }
 
 export interface IUser {
@@ -39,4 +31,13 @@ export interface MobileNavItemProps {
     href: string;
     text: string;
     onClick: () => void;
+}
+
+export interface HeroSlide {
+  id: string;
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  buttonText: string;
+  href: string;
 }
