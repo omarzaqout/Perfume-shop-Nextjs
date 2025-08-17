@@ -23,3 +23,14 @@ export const createCategoryActions = async ({ name }: { name: string }) => {
     });
     revalidatePath("/");
 };
+
+export const getCategoryByIdAction = async (id: string) => {
+  try {
+    const category = await prisma.category.findUnique({
+      where: { id },
+    });
+    return category;
+  } catch (error) {
+    return null;
+  }
+};
