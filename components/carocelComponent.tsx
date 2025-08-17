@@ -5,42 +5,32 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Autoplay from 'embla-carousel-autoplay';
 import Image from "next/image";
-import { useTranslations } from 'next-intl';
-import {HeroSlide} from '../interfaces'
+// --- 1. استيراد useLocale ---
+import { useLocale } from 'next-intl'; 
+import { HeroSlide } from '../interfaces';
 
 interface CarouselComponentProps {
   slides: HeroSlide[]; 
 }
 
-function CarouselComponent({slides}: CarouselComponentProps) {
+function CarouselComponent({ slides }: CarouselComponentProps) {
+  // --- 2. الحصول على اللغة الحالية ---
+  const locale = useLocale();
 
-    if (!slides || slides.length === 0) {
+  // --- 3. تحديد اتجاه العرض بناءً على اللغة ---
+  const direction = locale === 'ar' ? 'rtl' : 'ltr';
+
+  if (!slides || slides.length === 0) {
     return null; 
   }
-  const t = useTranslations("HomePage");
-
-  // const heroSlides = [
-  //   {
-  //     image: "https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=2700",
-  //     title: t("heroTitle"),
-  //     subtitle: t("heroSubtitle"),
-  //     buttonText: t("shopNow"),
-  //     href: "/shop",
-  //   },
-  //   {
-  //     image: "https://i.postimg.cc/bwnVL5R2/logo1.png",
-  //     title: t("heroSlide2.title"),
-  //     subtitle: t("heroSlide2.subtitle"),
-  //     buttonText: t("heroSlide2.buttonText"),
-  //     href: "/collections/summer",
-  //   },
-  // ];
 
   return (
     <section className="container mx-auto px-0">
       <Carousel
         plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
         opts={{ 
+          // --- 4. تمرير الاتجاه إلى خيارات الكاروسيل ---
+          direction: direction, 
           align: "start", 
           loop: true,
           breakpoints: {

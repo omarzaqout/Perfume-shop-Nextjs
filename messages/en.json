@@ -14,6 +14,14 @@
       "buttonText": "Explore Now"
     }
   },
+   "Metadata": {
+    "storeName": "My Awesome Store",
+    "categoryDescription": "Browse the best products in the {categoryName} category."
+  },
+  "CategoryPage": {
+    "browsePrompt": "Browse the latest products in the {categoryName} category",
+    "noProducts": "Sorry, there are no products in this category at the moment."
+  },
   "AppBar": {
     "searchPlaceholder": "Search for your perfume...",
     "storeName": "Perfume Store",

@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { Link } from "@/i18n/navigation";
 import {
   Home,
   ShoppingBag,
@@ -14,6 +13,7 @@ import {
 } from "lucide-react";
 import { ICategory } from "@/interfaces";
 import { useTranslations } from "next-intl"; // <-- 1. استيراد Hook الترجمة
+import { LinkWithSpinner } from "./ui/LinkWithSpinner";
 
 interface Brand {
   name: string;
@@ -44,7 +44,7 @@ const ContentSidebar = ({
   return (
     <div className="w-full h-full bg-card text-foreground flex flex-col">
       <div className="p-5 border-b border-border">
-        <Link href="/" className="flex items-center gap-4 group">
+        <LinkWithSpinner href="/" className="flex items-center gap-4 group">
           <div className="bg-primary w-12 h-12 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110">
             <Gem size={24} className="text-primary-foreground" />
           </div>
@@ -54,13 +54,13 @@ const ContentSidebar = ({
             </h1>
             <p className="text-xs text-muted-foreground">{t("tagline")}</p>
           </div>
-        </Link>
+        </LinkWithSpinner>
       </div>
 
       <div className="flex-1 overflow-y-auto p-3 scroll-hide">
         <div className="space-y-1 py-2">
           {mainItems.map((item) => (
-            <Link
+            <LinkWithSpinner
               key={item.title}
               href={item.url}
               className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
@@ -70,7 +70,7 @@ const ContentSidebar = ({
                 className="text-muted-foreground group-hover:text-inherit transition-colors"
               />
               <span className="font-medium text-inherit">{item.title}</span>
-            </Link>
+            </LinkWithSpinner>
           ))}
         </div>
 
@@ -81,13 +81,13 @@ const ContentSidebar = ({
           setIsOpen={setOpenCategories}
         >
           {categories.map((category) => (
-            <Link
+            <LinkWithSpinner
               key={category.id}
               href={`/category/${category.id}`}
               className="block p-2 rounded-md text-muted-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors text-sm"
             >
               {category.name}
-            </Link>
+            </LinkWithSpinner>
           ))}
         </CollapsibleSection>
 
@@ -98,7 +98,7 @@ const ContentSidebar = ({
           setIsOpen={setOpenBrands}
         >
           {brands.map((brand) => (
-            <Link
+            <LinkWithSpinner
               key={brand.id}
               href={`/brand/${brand.id}`}
               className="flex items-center gap-2 p-2 rounded-md text-muted-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors text-sm"
@@ -115,7 +115,7 @@ const ContentSidebar = ({
                 </div>
               )}
               <span>{brand.name}</span>
-            </Link>
+            </LinkWithSpinner>
           ))}
         </CollapsibleSection>
       </div>

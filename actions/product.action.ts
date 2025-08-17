@@ -1,7 +1,6 @@
 "use server";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-
 import { IProduct } from "@/interfaces";
 
 const prisma = new PrismaClient();
@@ -31,6 +30,30 @@ export async function getProductListActions(searchTerm?: string, skip = 0, take 
     });
 }
 
+export async function getProductsByCategoryActions(categoryId: string, skip = 0, take = 10) {
+    return await prisma.product.findMany({
+        where: {
+            categoryId: categoryId,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+        skip,
+        take,
+        include: {
+            brand: {
+                select: {
+                    name: true,
+                },
+            },
+            category: {
+                select: {
+                    name: true,
+                },
+            },
+        },
+    });
+}
 
 export const createProductActions = async ({
     name,
@@ -41,7 +64,7 @@ export const createProductActions = async ({
     categoryId,
     brandId,
 }: IProduct) => {
-    console.log("Creating product with data:",)
+    console.log("Creating product with data:");
     await prisma.product.create({
         data: {
             name,

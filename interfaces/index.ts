@@ -34,7 +34,6 @@ export interface MobileNavItemProps {
 }
 
 export interface HeroSlide {
-  id: string;
   title: string;
   subtitle: string;
   imageUrl: string;

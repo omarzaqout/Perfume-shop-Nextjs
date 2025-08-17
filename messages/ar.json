@@ -14,6 +14,15 @@
       "buttonText": "استكشف الآن"
     }
   },
+
+  "Metadata": {
+    "storeName": "متجري الرائع",
+    "categoryDescription": "تصفح أفضل المنتجات في فئة {categoryName}."
+  },
+  "CategoryPage": {
+    "browsePrompt": "تصفح أحدث المنتجات في فئة {categoryName}",
+    "noProducts": "عذراً، لا توجد منتجات في هذه الفئة حالياً."
+  },
   "AppBar": {
     "searchPlaceholder": "ابحث عن عطرك...",
     "storeName": "متجر عطور",
