@@ -30,10 +30,21 @@ export async function getProductListActions(searchTerm?: string, skip = 0, take 
     });
 }
 
-export async function getProductsByCategoryActions(categoryId: string, skip = 0, take = 10) {
+export async function getProductsByCategoryActions(
+    categoryId: string,
+    search: string = "",
+    skip = 0,
+    take = 10
+) {
     return await prisma.product.findMany({
         where: {
             categoryId: categoryId,
+            OR: search
+                ? [
+                    { name: { contains: search, mode: "insensitive" } },
+                    { description: { contains: search, mode: "insensitive" } },
+                ]
+                : undefined,
         },
         orderBy: {
             createdAt: "desc",
@@ -54,6 +65,7 @@ export async function getProductsByCategoryActions(categoryId: string, skip = 0,
         },
     });
 }
+
 
 export const createProductActions = async ({
     name,

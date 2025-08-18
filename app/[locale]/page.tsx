@@ -13,29 +13,13 @@ import BrandGrid from "@/components/BrandGrid";
 import CarouselComponent from "@/components/carocelComponent";
 import { getHeroSlidesAction } from "@/actions/hero.action";
 import { getProductListActions } from "@/actions/product.action";
-
+import { getUserRole } from "@/lib/useUserRole";
 
 export default async function HomePage() {
   const t = await getTranslations("HomePage");
   const categories = await getCategoryListActions();
 
-  const { userId } = await auth();
-  const safeUserId = userId ?? "";
-  let role = "CLIENT";
-
-  if (userId) {
-    const clerk = await clerkClient();
-    const user = await clerk.users.getUser(userId);
-
-    await createUserAction({
-      id: user.id,
-      email: user.emailAddresses[0]?.emailAddress || "",
-      name: user.firstName || "New User",
-    });
-
-    const userInfo = await getUserByIdAction(user.id);
-    role = userInfo?.role ?? "CLIENT";
-  }
+  const { userId, role } = await getUserRole();
 
   const brands = await getBrandListActions();
   // const heroSlides = await getHeroSlidesAction();
@@ -47,44 +31,46 @@ export default async function HomePage() {
     return await getProductListActions("", skip, take);
   };
   const heroSlides = [
-      {
-        title: "خصم الصيف الكبير",
-        subtitle: "خصم يصل إلى 50% على المجموعة الصيفية",
-        imageUrl: "https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=404&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        buttonText: "تسوق الآن",
-        href: "/summer-collection",
-        isActive: true,
-        order: 1
-      },
-      {
-        title: "مجموعة جديدة",
-        subtitle: "اكتشف أحدث منتجاتنا لهذا الموسم",
-        imageUrl: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        buttonText: "استكشف",
-        href: "/new-arrivals",
-        isActive: true,
-        order: 2
-      },
-      {
-        title: "عروض خاصة",
-        subtitle: "صفقات حصرية لمدة محدودة",
-        imageUrl: "https://images.unsplash.com/photo-1593487568720-92097fb460fb?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        buttonText: "استفد الآن",
-        href: "/special-offers",
-        isActive: true,
-        order: 3
-      },
-    ]
+    {
+      title: "خصم الصيف الكبير",
+      subtitle: "خصم يصل إلى 50% على المجموعة الصيفية",
+      imageUrl:
+        "https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=404&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      buttonText: "تسوق الآن",
+      href: "/summer-collection",
+      isActive: true,
+      order: 1,
+    },
+    {
+      title: "مجموعة جديدة",
+      subtitle: "اكتشف أحدث منتجاتنا لهذا الموسم",
+      imageUrl:
+        "https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      buttonText: "استكشف",
+      href: "/new-arrivals",
+      isActive: true,
+      order: 2,
+    },
+    {
+      title: "عروض خاصة",
+      subtitle: "صفقات حصرية لمدة محدودة",
+      imageUrl:
+        "https://images.unsplash.com/photo-1593487568720-92097fb460fb?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      buttonText: "استفد الآن",
+      href: "/special-offers",
+      isActive: true,
+      order: 3,
+    },
+  ];
 
   return (
-    
     <div>
       <div className="pb-10">
         {heroSlides && heroSlides.length > 0 && (
-        <div className="sm:p-14 p-7">
-          <CarouselComponent slides={heroSlides} />
-        </div>
-      )}
+          <div className="sm:p-14 p-7">
+            <CarouselComponent slides={heroSlides} />
+          </div>
+        )}
         <div className="flex items-center justify-center mb-6 space-x-2 text-primary font-semibold">
           <FaStar />
           <span>{t("featuredProducts")}</span>
@@ -92,27 +78,25 @@ export default async function HomePage() {
         </div>
 
         {initialProducts.length > 0 ? (
-          <ProductGrid 
+          <ProductGrid
             initialProducts={initialProducts}
             loadMoreAction={loadMoreProducts}
             hasMore={initialProducts.length === 10}
           />
         ) : (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">
-              {t("noProductsAvailable")}
-            </p>
+            <p className="text-muted-foreground">{t("noProductsAvailable")}</p>
           </div>
         )}
 
         <BrandGrid brands={brands} />
-        
+
         {role === "ADMIN" && <AddCategoryForm />}
 
         {role === "SELLER" && (
           <>
-            <AddProductForm categories={categories} userId={safeUserId} />
-            <AddBrandForm userId={safeUserId} />
+            <AddProductForm categories={categories} userId={userId} />
+            <AddBrandForm userId={userId} />
           </>
         )}
       </div>

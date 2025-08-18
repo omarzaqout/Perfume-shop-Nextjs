@@ -2,7 +2,10 @@
 import { useState, useEffect, useTransition, useRef } from "react";
 import { useSearch } from "@/context/SearchContext";
 import ProductCard from "@/components/ProductCard";
-import { getProductListActions, getProductsByCategoryActions } from "@/actions/product.action";
+import {
+  getProductListActions,
+  getProductsByCategoryActions,
+} from "@/actions/product.action";
 import { ProductGridSkeleton } from "./Skeleton";
 
 type Product = {
@@ -17,7 +20,7 @@ type Product = {
   updatedAt: Date;
   categoryId: string;
   brandId: string;
-  category?: { name: string }; 
+  category?: { name: string };
 };
 
 type ProductGridProps = {
@@ -28,12 +31,12 @@ type ProductGridProps = {
   searchQuery?: string;
 };
 
-export default function ProductGrid({ 
-  initialProducts = [], 
-  loadMoreAction, 
+export default function ProductGrid({
+  initialProducts = [],
+  loadMoreAction,
   hasMore: initialHasMore = true,
   categoryId,
-  searchQuery = ""
+  searchQuery = "",
 }: ProductGridProps) {
   const { searchQuery: contextSearchQuery } = useSearch();
   const effectiveSearchQuery = searchQuery || contextSearchQuery;
@@ -49,7 +52,7 @@ export default function ProductGrid({
 
   const fetchProducts = (search: string, skip: number, take: number) => {
     if (categoryId) {
-      return getProductsByCategoryActions(categoryId, skip, take);
+      return getProductsByCategoryActions(categoryId, search, skip, take);
     }
     return getProductListActions(search, skip, take);
   };
@@ -71,13 +74,15 @@ export default function ProductGrid({
     if (!hasMore || isPending) return;
 
     startTransition(() => {
-      fetchProducts(effectiveSearchQuery, skipRef.current, take).then((newProducts) => {
-        setProducts((prev) => [...prev, ...newProducts]);
-        const newSkip = skipRef.current + newProducts.length;
-        setSkip(newSkip);
-        skipRef.current = newSkip;
-        setHasMore(newProducts.length === take);
-      });
+      fetchProducts(effectiveSearchQuery, skipRef.current, take).then(
+        (newProducts) => {
+          setProducts((prev) => [...prev, ...newProducts]);
+          const newSkip = skipRef.current + newProducts.length;
+          setSkip(newSkip);
+          skipRef.current = newSkip;
+          setHasMore(newProducts.length === take);
+        }
+      );
     });
   };
 

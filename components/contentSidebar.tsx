@@ -24,9 +24,11 @@ interface Brand {
 const ContentSidebar = ({
   categories,
   brands,
+  role,
 }: {
   categories: ICategory[];
   brands: Brand[];
+  role?: string;
 }) => {
   const t = useTranslations("Sidebar");
 
@@ -72,6 +74,21 @@ const ContentSidebar = ({
               <span className="font-medium text-inherit">{item.title}</span>
             </LinkWithSpinner>
           ))}
+
+          {role === "ADMIN" && (
+            <LinkWithSpinner
+              href="/brands"
+              className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
+            >
+              <Gem
+                size={20}
+                className="text-muted-foreground group-hover:text-inherit transition-colors"
+              />
+              <span className="font-medium text-inherit">
+                {t("all_brands")}
+              </span>
+            </LinkWithSpinner>
+          )}
         </div>
 
         <CollapsibleSection

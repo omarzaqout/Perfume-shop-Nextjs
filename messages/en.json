@@ -46,7 +46,8 @@
     "bestsellers": "Bestsellers",
     "categories": "Categories",
     "brands": "Brands",
-    "footer": "© 2025 Perfume Store. All rights reserved."
+    "footer": "© 2025 Perfume Store. All rights reserved.",
+    "all_brands": "All Brands"
   },
   "BottomBar": {
     "home": "Home",

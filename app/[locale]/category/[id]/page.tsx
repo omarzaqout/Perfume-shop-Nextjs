@@ -3,14 +3,14 @@ import { getCategoryByIdAction } from "@/actions/category.action";
 import { getProductsByCategoryActions } from "@/actions/product.action";
 import ProductGrid from "@/components/ProductGrid";
 import { notFound } from "next/navigation";
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
 type Props = {
   params: { id: string; locale: string };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-const { id: categoryId, locale } = await params;
+  const { id: categoryId, locale } = await params;
   const category = await getCategoryByIdAction(categoryId);
 
   if (!category) {
@@ -20,33 +20,31 @@ const { id: categoryId, locale } = await params;
     };
   }
 
-  const t = await getTranslations({ locale, namespace: 'Metadata' });
+  const t = await getTranslations({ locale, namespace: "Metadata" });
 
   return {
-    title: `${category.name} | ${t('storeName')}`,
-    description: t('categoryDescription', { categoryName: category.name }),
+    title: `${category.name} | ${t("storeName")}`,
+    description: t("categoryDescription", { categoryName: category.name }),
     openGraph: {
-      title: `${category.name} | ${t('storeName')}`,
-      description: t('categoryDescription', { categoryName: category.name }),
-
+      title: `${category.name} | ${t("storeName")}`,
+      description: t("categoryDescription", { categoryName: category.name }),
     },
   };
 }
 
-
-export default async function CategoryPage({ 
-  params 
-}: { 
-  params: { 
+export default async function CategoryPage({
+  params,
+}: {
+  params: {
     id: string;
     locale: string;
-  } 
+  };
 }) {
   const { id: categoryId } = await params;
 
   const [category, initialProducts] = await Promise.all([
     getCategoryByIdAction(categoryId),
-    getProductsByCategoryActions(categoryId, 0, 10)
+    getProductsByCategoryActions(categoryId, "", 0, 10),
   ]);
 
   if (!category) {
@@ -61,20 +59,18 @@ export default async function CategoryPage({
           {category.name}
         </h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          {t('browsePrompt', { categoryName: category.name })}
+          {t("browsePrompt", { categoryName: category.name })}
         </p>
       </div>
 
       {initialProducts.length > 0 ? (
-        <ProductGrid 
+        <ProductGrid
           initialProducts={initialProducts}
           categoryId={categoryId}
         />
       ) : (
         <div className="text-center py-16">
-          <p className="text-xl text-muted-foreground">
-            {t('noProducts')}
-          </p>
+          <p className="text-xl text-muted-foreground">{t("noProducts")}</p>
         </div>
       )}
     </div>
