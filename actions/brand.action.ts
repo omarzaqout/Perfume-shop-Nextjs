@@ -72,3 +72,15 @@ export const getBrands = async () => {
         productCount: brand._count.products,
     }));
 };
+
+export const getBrandByIdAction = async (id: string) => {
+  try {
+    const brand = await prisma.brand.findUnique({
+      where: { id },
+    });
+    return brand;
+  } catch (error) {
+    return null;
+  }
+};
+
