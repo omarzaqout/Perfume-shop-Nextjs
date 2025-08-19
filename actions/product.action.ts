@@ -67,6 +67,44 @@ export async function getProductsByCategoryActions(
 }
 
 
+export async function getProductsByBrandActions(
+    brandId: string,
+    search: string = "",
+    skip = 0,
+    take = 10
+) {
+    return await prisma.product.findMany({
+        where: {
+            brandId: brandId,
+            OR: search
+                ? [
+                    { name: { contains: search, mode: "insensitive" } },
+                    { description: { contains: search, mode: "insensitive" } },
+                ]
+                : undefined,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+        skip,
+        take,
+        include: {
+            brand: {
+                select: {
+                    name: true,
+                },
+            },
+            category: {
+                select: {
+                    name: true,
+                },
+            },
+        },
+    });
+}
+
+
+
 export const createProductActions = async ({
     name,
     description,

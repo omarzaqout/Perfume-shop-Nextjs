@@ -90,7 +90,7 @@ export default async function RootLayout({
                           </div>
                         </div>
 
-                        <div className="p-5 sm:mt-6 mt-1 w-full h-screen overflow-y-auto scrollbar-hide">
+                        <div className="p-5 sm:mt-6 mt-1 w-full h-screen overflow-y-auto no-scrollbar">
                           {children}
                         </div>
                       </main>

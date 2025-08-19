@@ -17,11 +17,16 @@
 
   "Metadata": {
     "storeName": "متجري الرائع",
-    "categoryDescription": "تصفح أفضل المنتجات في فئة {categoryName}."
+    "categoryDescription": "تصفح أفضل المنتجات في فئة {categoryName}.",
+    "brandDescription": "تصفح عطور {brandName}."
   },
   "CategoryPage": {
     "browsePrompt": "تصفح أحدث المنتجات في فئة {categoryName}",
     "noProducts": "عذراً، لا توجد منتجات في هذه الفئة حالياً."
+  },
+  "BrandPage": {
+    "browsePrompt": "تصفح عطور {brandName}.",
+    "noProducts": "لا توجد منتجات متاحة لهذه العلامة التجارية."
   },
   "AppBar": {
     "searchPlaceholder": "ابحث عن عطرك...",

@@ -5,6 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import {
   getProductListActions,
   getProductsByCategoryActions,
+  getProductsByBrandActions, // ✅ استدعاء الدالة الجديدة
 } from "@/actions/product.action";
 import { ProductGridSkeleton } from "./Skeleton";
 
@@ -28,6 +29,7 @@ type ProductGridProps = {
   loadMoreAction?: (skip: number, take: number) => Promise<Product[]>;
   hasMore?: boolean;
   categoryId?: string;
+  brandId?: string; // ✅ أضفنا brandId
   searchQuery?: string;
 };
 
@@ -36,6 +38,7 @@ export default function ProductGrid({
   loadMoreAction,
   hasMore: initialHasMore = true,
   categoryId,
+  brandId, // ✅ استقباله كمُدخل
   searchQuery = "",
 }: ProductGridProps) {
   const { searchQuery: contextSearchQuery } = useSearch();
@@ -54,6 +57,9 @@ export default function ProductGrid({
     if (categoryId) {
       return getProductsByCategoryActions(categoryId, search, skip, take);
     }
+    if (brandId) {
+      return getProductsByBrandActions(brandId, search, skip, take); // ✅ شرط جديد
+    }
     return getProductListActions(search, skip, take);
   };
 
@@ -68,7 +74,7 @@ export default function ProductGrid({
         setIsLoading(false);
       });
     });
-  }, [effectiveSearchQuery, categoryId]);
+  }, [effectiveSearchQuery, categoryId, brandId]); // ✅ أضفنا brandId هنا
 
   const loadMore = () => {
     if (!hasMore || isPending) return;
