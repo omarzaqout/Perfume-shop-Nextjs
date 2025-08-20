@@ -17,15 +17,15 @@ export default function AppBar() {
       <div className="container mx-auto px-4">
         {/* Desktop Version */}
         <div className="hidden md:flex items-center justify-between py-3 gap-6">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="flex items-center gap-3 group shrink-0"
             aria-label="Home"
           >
             <div className="relative w-10 h-10">
-              <Image 
-                src="/logo.svg" 
-                alt="Logo" 
+              <Image
+                src="/logo.svg"
+                alt="Logo"
                 fill
                 className="object-contain"
               />
@@ -50,7 +50,7 @@ export default function AppBar() {
             </SignedIn>
             <SignedOut>
               <SignInButton mode="modal">
-                <button 
+                <button
                   className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-accent transition-colors text-sm font-medium"
                   aria-label={t("signIn")}
                 >
@@ -77,15 +77,15 @@ export default function AppBar() {
 
         {/* Mobile Version */}
         <div className="md:hidden flex items-center justify-between py-3 gap-4">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="flex items-center gap-2 shrink-0"
             aria-label="Home"
           >
             <div className="relative w-8 h-8">
-              <Image 
-                src="/logo.svg" 
-                alt="Logo" 
+              <Image
+                src="/logo.svg"
+                alt="Logo"
                 fill
                 className="object-contain"
               />
@@ -113,7 +113,7 @@ export default function AppBar() {
             </SignedIn>
             <SignedOut>
               <SignInButton mode="modal">
-                <button 
+                <button
                   className="p-1.5 rounded-full hover:bg-accent transition-colors"
                   aria-label={t("signIn")}
                 >
@@ -121,9 +121,9 @@ export default function AppBar() {
                 </button>
               </SignInButton>
             </SignedOut>
-            
-            <LocaleSwitcher  />
-            <ModeToggle  />
+
+            <LocaleSwitcher />
+            <ModeToggle />
           </div>
         </div>
       </div>

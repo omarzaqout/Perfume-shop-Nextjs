@@ -26,9 +26,24 @@ model User {
   role      Role     @default(CLIENT)
   createdAt DateTime @default(now())
 
-  brands Brand[]
-  orders Order[]
-  cart   Cart?
+  brands         Brand[]
+  orders         Order[]
+  cart           Cart?
+  sellerRequests SellerRequest[]
+}
+
+model SellerRequest {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  name        String
+  description String?
+  phone       Int?
+  address     String?
+
+  createdAt DateTime      @default(now())
+  status    RequestStatus @default(PENDING)
 }
 
 model Brand {
@@ -57,6 +72,12 @@ model Product {
   brand       Brand       @relation(fields: [brandId], references: [id])
   orderItems  OrderItem[]
   cartItems   CartItem[]
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 model Category {
@@ -104,15 +125,15 @@ model CartItem {
 }
 
 model HeroSlide {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  subtitle    String
-  imageUrl    String
-  buttonText  String
-  href        String
-  isActive    Boolean @default(true)
-  order       Int     @default(0)   
-  createdAt   DateTime @default(now())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  subtitle   String
+  imageUrl   String
+  buttonText String
+  href       String
+  isActive   Boolean  @default(true)
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
 }
 
 type Address {

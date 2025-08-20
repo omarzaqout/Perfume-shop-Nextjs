@@ -76,18 +76,33 @@ const ContentSidebar = ({
           ))}
 
           {role === "ADMIN" && (
-            <LinkWithSpinner
-              href="/brands"
-              className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
-            >
-              <Gem
-                size={20}
-                className="text-muted-foreground group-hover:text-inherit transition-colors"
-              />
-              <span className="font-medium text-inherit">
-                {t("all_brands")}
-              </span>
-            </LinkWithSpinner>
+            <>
+              <LinkWithSpinner
+                href="/brands"
+                className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
+              >
+                <Gem
+                  size={20}
+                  className="text-muted-foreground group-hover:text-inherit transition-colors"
+                />
+                <span className="font-medium text-inherit">
+                  {t("all_brands")}
+                </span>
+              </LinkWithSpinner>
+
+              <LinkWithSpinner
+                href="/requests"
+                className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
+              >
+                <Gem
+                  size={20}
+                  className="text-muted-foreground group-hover:text-inherit transition-colors"
+                />
+                <span className="font-medium text-inherit">
+                  {t("register_brand")}
+                </span>
+              </LinkWithSpinner>
+            </>
           )}
         </div>
 

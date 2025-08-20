@@ -1,3 +1,5 @@
+import { RequestStatus, Role } from "@prisma/client";
+
 export interface ICategory {
 
     id: string;
@@ -34,9 +36,36 @@ export interface MobileNavItemProps {
 }
 
 export interface HeroSlide {
-  title: string;
-  subtitle: string;
-  imageUrl: string;
-  buttonText: string;
-  href: string;
+    title: string;
+    subtitle: string;
+    imageUrl: string;
+    buttonText: string;
+    href: string;
+}
+
+export interface IPrimumAccount {
+    storeName: String
+    description: String
+    phone: Number
+    officialEmail: String
+    address: String
+}
+
+export interface ISellerRequest {
+    id: string;
+    name: string;             // اسم المتجر
+    description: string | null;
+    phone: number | null;
+    address: string | null;
+    status: RequestStatus;
+    createdAt: Date;
+    userId: string;
+    user: IUserWithRequests;
+}
+export interface IUserWithRequests {
+    id: string;
+    name: string;
+    email: string;
+    role: Role;
+    createdAt: Date;
 }

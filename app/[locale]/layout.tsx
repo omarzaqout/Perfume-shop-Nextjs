@@ -18,6 +18,7 @@ import AppBar from "@/components/AppBar";
 import PerfumeSidebar from "@/components/PerfumeSidebar";
 import SearchBar from "@/components/SearchBar";
 import { SearchProvider } from "@/context/SearchContext";
+import { getUserRole } from "@/lib/useUserRole";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

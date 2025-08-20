@@ -11,9 +11,9 @@ import { getBrandListActions } from "@/actions/brand.action";
 import AddCategoryForm from "@/components/AddCategoryForm";
 import BrandGrid from "@/components/BrandGrid";
 import CarouselComponent from "@/components/carocelComponent";
-import { getHeroSlidesAction } from "@/actions/hero.action";
 import { getProductListActions } from "@/actions/product.action";
 import { getUserRole } from "@/lib/useUserRole";
+import AddPremiumAccount from "@/components/ToPremiumAccount";
 
 export default async function HomePage() {
   const t = await getTranslations("HomePage");
@@ -22,10 +22,8 @@ export default async function HomePage() {
   const { userId, role } = await getUserRole();
 
   const brands = await getBrandListActions();
-  // const heroSlides = await getHeroSlidesAction();
-  const initialProducts = await getProductListActions("", 0, 10); // جلب أول 10 منتجات
+  const initialProducts = await getProductListActions("", 0, 10);
 
-  // دالة لتحميل المزيد من المنتجات
   const loadMoreProducts = async (skip: number, take: number) => {
     "use server";
     return await getProductListActions("", skip, take);
@@ -91,7 +89,14 @@ export default async function HomePage() {
 
         <BrandGrid brands={brands} />
 
-        {role === "ADMIN" && <AddCategoryForm />}
+        {role === "CLIENT" && <AddPremiumAccount userId={userId} />}
+
+        {role === "ADMIN" && (
+          <div>
+            {" "}
+            <AddCategoryForm />
+          </div>
+        )}
 
         {role === "SELLER" && (
           <>
