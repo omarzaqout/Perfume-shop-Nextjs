@@ -6,7 +6,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export type UserRoleResult = {
     userId: string;
-    role: "CLIENT" | "ADMIN" | string;
+    role: "CLIENT" | "ADMIN" | "SELLER";
 };
 
 export async function getUserRole(): Promise<UserRoleResult> {

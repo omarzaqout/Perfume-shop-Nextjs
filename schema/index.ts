@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+
+const MAX_FILE_SIZE = 5000000; // 5MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
 export const productFormSchema = z.object({
   name: z
     .string()
@@ -62,4 +66,13 @@ export const premiumAccountFormSchema = z.object({
     .string()
     .min(5, { message: "Address must be at least 5 characters" })
     .max(200, { message: "Address must not exceed 200 characters" }),
+
+      image: z
+    .instanceof(File, { message: "Image is required." })
+    .optional()
+    .refine((file) => !file || file.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+    .refine(
+      (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported."
+    ),
 });

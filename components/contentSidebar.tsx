@@ -1,5 +1,9 @@
 "use client";
 import React, { useState } from "react";
+
+import { ICategory } from "@/interfaces";
+import { useTranslations } from "next-intl";
+import { LinkWithSpinner } from "./ui/LinkWithSpinner";
 import {
   Home,
   ShoppingBag,
@@ -10,10 +14,10 @@ import {
   Gem,
   ChevronDown,
   ChevronUp,
+  Tags,
+  ClipboardPlus,
+  Bookmark,
 } from "lucide-react";
-import { ICategory } from "@/interfaces";
-import { useTranslations } from "next-intl"; // <-- 1. استيراد Hook الترجمة
-import { LinkWithSpinner } from "./ui/LinkWithSpinner";
 
 interface Brand {
   name: string;
@@ -77,11 +81,12 @@ const ContentSidebar = ({
 
           {role === "ADMIN" && (
             <>
+              {/* -- تم التعديل هنا -- */}
               <LinkWithSpinner
                 href="/brands"
                 className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
               >
-                <Gem
+                <Tags
                   size={20}
                   className="text-muted-foreground group-hover:text-inherit transition-colors"
                 />
@@ -90,11 +95,12 @@ const ContentSidebar = ({
                 </span>
               </LinkWithSpinner>
 
+              {/* -- وتم التعديل هنا -- */}
               <LinkWithSpinner
                 href="/requests"
                 className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
               >
-                <Gem
+                <ClipboardPlus
                   size={20}
                   className="text-muted-foreground group-hover:text-inherit transition-colors"
                 />
@@ -123,9 +129,10 @@ const ContentSidebar = ({
           ))}
         </CollapsibleSection>
 
+        {/* -- وتم التعديل هنا -- */}
         <CollapsibleSection
           title={t("brands")}
-          icon={Star}
+          icon={Bookmark}
           isOpen={openBrands}
           setIsOpen={setOpenBrands}
         >

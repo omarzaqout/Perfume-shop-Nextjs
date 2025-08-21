@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { notFound } from "next/navigation";
+import SimpleBottomNavigation from "@/components/ButtomBar";
 
 import { ThemeProvider } from "@/provider/theme-provider";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -16,10 +17,8 @@ import {
 } from "@/components/ui/sidebar";
 import AppBar from "@/components/AppBar";
 import PerfumeSidebar from "@/components/PerfumeSidebar";
-import SearchBar from "@/components/SearchBar";
 import { SearchProvider } from "@/context/SearchContext";
-import { getUserRole } from "@/lib/useUserRole";
-
+import SearchBarVisibility from "@/components/SearchBarVisibility";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -87,7 +86,7 @@ export default async function RootLayout({
                         <div className="flex p-1 sm:p-0">
                           <SidebarTrigger className="p-2 m-2 rounded-lg hover:bg-accent" />
                           <div className="w-full">
-                            <SearchBar />
+                            <SearchBarVisibility />
                           </div>
                         </div>
 
@@ -96,6 +95,7 @@ export default async function RootLayout({
                         </div>
                       </main>
                     </div>
+                      <SimpleBottomNavigation />
                   </div>
                 </SearchProvider>
               </SidebarProvider>

@@ -41,11 +41,11 @@ model SellerRequest {
   description String?
   phone       Int?
   address     String?
+  logoUrl     String?
 
   createdAt DateTime      @default(now())
   status    RequestStatus @default(PENDING)
 }
-
 model Brand {
   id      String  @id @default(auto()) @map("_id") @db.ObjectId
   name    String  @unique

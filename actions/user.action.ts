@@ -31,15 +31,17 @@ export async function addPrimumAccountAction({
     description,
     phone,
     address,
+    logoUrl,
 }: {
     userId: string;
     storeName: string;
     description?: string;
     phone?: number;
     address?: string;
+    logoUrl?: string;
 }): Promise<{ success: boolean; message: string }> {
     if (!userId || !storeName) {
-        return { success: false, message: "User ID واسم المتجر مطلوبان." };
+        return { success: false, message: "User ID and Store Name are required." };
     }
 
     const existingRequest = await prisma.sellerRequest.findFirst({
@@ -47,7 +49,7 @@ export async function addPrimumAccountAction({
     });
 
     if (existingRequest) {
-        return { success: false, message: "طلبك قيد الانتظار بالفعل." };
+        return { success: false, message: "You already have a pending request." };
     }
 
     await prisma.sellerRequest.create({
@@ -57,11 +59,29 @@ export async function addPrimumAccountAction({
             description,
             phone,
             address,
+            logoUrl,
         },
     });
 
-    return { success: true, message: "تم إرسال طلبك بنجاح." };
+    return { success: true, message: "Your request has been sent successfully!" };
 }
+
+export async function getUserSellerRequest(userId: string) {
+  if (!userId) return null;
+
+  try {
+    const request = await prisma.sellerRequest.findFirst({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+    return request;
+  } catch (error) {
+    console.error("Failed to fetch seller request:", error);
+    return null;
+  }
+}
+
+
 
 export async function getPendingSellerRequests() {
     const pendingRequests = await prisma.sellerRequest.findMany({

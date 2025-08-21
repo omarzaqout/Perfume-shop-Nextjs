@@ -14,6 +14,58 @@
       "buttonText": "Explore Now"
     }
   },
+
+    "PremiumPage": {
+        "form": {
+    "title": "Seller Application Form",
+    "description": "Please fill in your store details below to get started.",
+    "storeName": "Store Name",
+    "descriptionLabel": "Description",
+    "storeLogo": "Store Logo",
+    "phone": "Phone Number",
+    "address": "Address",
+    "submit": "Submit Request",
+    "submitting": "Submitting...",
+    "successTitle": "Request Sent!",
+    "successDescription": "Your request to become a seller has been submitted. We will review it shortly."
+  },
+    "badge": "Exclusive",
+    "title": "Elevate Your Business, Become a Seller Today",
+    "subtitle": "Join our platform as a seller and start showcasing your products to thousands of customers. Fill out the form below to begin your journey with us.",
+    "features": {
+      "reach": {
+        "title": "Wider Reach",
+        "description": "Showcase your products to a large and targeted audience interested in luxury perfumes."
+      },
+      "sales": {
+        "title": "Increase Sales",
+        "description": "Utilize our marketing tools to boost your sales and grow your brand."
+      },
+      "tools": {
+        "title": "Easy Tools",
+        "description": "A simple dashboard to manage products, track orders, and analyze your performance with ease."
+      }
+    },
+    "loginPrompt": {
+      "title": "You're Just One Step Away",
+      "description": "Please sign in or create a new account to be able to submit a request to become a seller.",
+      "button": "Sign In"
+    },
+    "status": {
+      "PENDING": {
+        "title": "Your Request is Under Review",
+        "description": "We have successfully received your application. Our team is currently reviewing it and you will be notified of the decision soon. Thank you for your patience!"
+      },
+      "APPROVED": {
+        "title": "Congratulations, Your Request is Approved!",
+        "description": "You are now a verified seller on our platform. You can start adding your products and managing your store from your dashboard."
+      },
+      "REJECTED": {
+        "title": "An Update On Your Application",
+        "description": "After careful review, we regret to inform you that we cannot move forward with your application at this time. Please check your email for more details."
+      }
+    }
+  },
    "Metadata": {
     "storeName": "Perfume Store",
     "categoryDescription": "Browse the best products in the {categoryName} category.",
@@ -43,7 +95,9 @@
     "changeLanguage": "Change Language",
     "openMenu": "Open Menu",
     "closeMenu": "Close Menu",
-     "premium": "Premium"
+     "premium": "Premium",
+    "seller": "Seller",
+    "admin": "Admin"
   },
   "Sidebar": {
     "storeName": "Perfume Store",

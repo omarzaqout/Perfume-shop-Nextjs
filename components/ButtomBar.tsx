@@ -36,7 +36,7 @@ export default function BottomBar() {
   const cartItem = { href: "/cart", label: t("cart"), icon: ShoppingCart };
 
   return (
-    <footer className="md:hidden fixed bottom-0 left-0 z-40 w-full h-16 bg-card border-t border-border">
+    <footer className="md:hidden fixed bottom-0 left-0 z-40 w-full h-16 bg-card border-t border-border sm:my-18">
       <div className="grid grid-cols-5 items-center justify-center h-full">
         
         {/* العناصر على اليسار */}
