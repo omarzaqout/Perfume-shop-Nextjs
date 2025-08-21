@@ -69,6 +69,16 @@ export default async function AppBar() {
               </div>
             </SignedIn>
             <SignedOut>
+              {/* زر Premium للمستخدمين غير المسجلين */}
+              <Link
+                href="/premium"
+                className="flex items-center gap-1 text-sm font-medium text-amber-500 hover:text-amber-400 transition-colors mr-2"
+                aria-label={t("premium")}
+              >
+                <Gem size={16} />
+                {t("premium")}
+              </Link>
+              
               <SignInButton mode="modal">
                 <button
                   className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-accent transition-colors text-sm font-medium"
@@ -117,18 +127,16 @@ export default async function AppBar() {
           </Link>
 
           <div className="flex items-center gap-3">
+            {/* زر Premium يظهر للجميع في الهاتف */}
+            <Link
+              href="/premium"
+              className="flex items-center p-1.5 text-amber-500 hover:text-amber-400 transition-colors"
+              aria-label={t("premium")}
+            >
+              <Gem size={18} />
+            </Link>
+
             <SignedIn>
-              {/* عرض الأيقونة حسب نوع المستخدم في الهاتف */}
-              {role === "CLIENT" && (
-                <Link
-                  href="/premium"
-                  className="flex items-center p-1.5 text-amber-500 hover:text-amber-400 transition-colors"
-                  aria-label={t("premium")}
-                >
-                  <Gem size={18} />
-                </Link>
-              )}
-              
               {role === "SELLER" && (
                 <div className="p-1.5 text-green-600" title={t("seller")}>
                   <UserCheck size={18} />
@@ -141,7 +149,6 @@ export default async function AppBar() {
                 </div>
               )}
             </SignedIn>
-
             <LocaleSwitcher />
             <ModeToggle />
           </div>
