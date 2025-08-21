@@ -34,6 +34,7 @@ const AddPremiumAccount = ({ userId }: { userId: string }) => {
   const [loading, setLoading] = useState(false);
   const [Isclose, setIsclose] = useState(false);
 
+  // <-- 1. تم تعديل القيم الافتراضية لتشمل حقل الصورة
   const form = useForm({
     resolver: zodResolver(premiumAccountFormSchema),
     defaultValues: {
@@ -41,23 +42,45 @@ const AddPremiumAccount = ({ userId }: { userId: string }) => {
       description: "",
       Phone: undefined,
       address: "",
+      image: undefined, 
     },
     mode: "onChange",
   });
 
+  // <-- 2. تم تحديث دالة onSubmit لتقوم برفع الصورة أولاً
   const onSubmit = async (
     values: z.infer<typeof premiumAccountFormSchema>
   ): Promise<void> => {
     setLoading(true);
 
     try {
-      console.log("Submitting values:", values);
+      let logoUrl = "";
+
+
+      if (values.image) {
+        const formData = new FormData();
+
+        formData.append("image", values.image);
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || "Failed to upload image");
+
+        logoUrl = data.url;
+      }
+
       const response = await addPrimumAccountAction({
         userId,
         storeName: values.storeName,
         description: values.description,
         phone: values.Phone,
         address: values.address,
+        logoUrl: logoUrl,
       });
 
       if (!response.success) {
@@ -66,10 +89,11 @@ const AddPremiumAccount = ({ userId }: { userId: string }) => {
       }
 
       alert(response.message);
+      form.reset(); // إعادة تعيين الحقول بعد النجاح
       setIsclose(false);
     } catch (error) {
       console.error(error);
-      alert("حدث خطأ أثناء إرسال الطلب.");
+      alert("An error occurred while submitting the request.");
     } finally {
       setLoading(false);
     }
@@ -80,23 +104,26 @@ const AddPremiumAccount = ({ userId }: { userId: string }) => {
       <DialogTrigger asChild>
         <Button className="flex items-center justify-center">
           <Plus className="mr-2" />
-          Add Premium Account
+          Request Premium Account
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Product</DialogTitle>
-          <DialogDescription>Add Product</DialogDescription>
+          <DialogTitle>Become a Seller</DialogTitle>
+          <DialogDescription>
+            Fill out the form below to request a seller account.
+          </DialogDescription>
         </DialogHeader>
         <div className="py-4 max-h-[70vh] overflow-y-auto scroll-hide">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              {/* باقي الحقول تبقى كما هي */}
               <FormField
                 control={form.control}
                 name="storeName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Store Name</FormLabel>
                     <FormControl>
                       <Input placeholder="Store name" {...field} />
                     </FormControl>
@@ -117,12 +144,33 @@ const AddPremiumAccount = ({ userId }: { userId: string }) => {
                   </FormItem>
                 )}
               />
+
+              {/* <-- 3. تم إضافة حقل رفع صورة الشعار */}
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field: { onChange, ref, ...rest } }) => (
+                  <FormItem>
+                    <FormLabel>Store Logo</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        ref={ref}
+                        onChange={(e) => onChange(e.target.files?.[0])}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="Phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Numper</FormLabel>
+                    <FormLabel>Phone Number</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -137,10 +185,6 @@ const AddPremiumAccount = ({ userId }: { userId: string }) => {
                           const val = e.target.value;
                           field.onChange(val === "" ? undefined : Number(val));
                         }}
-                        name={field.name}
-                        ref={field.ref}
-                        onBlur={field.onBlur}
-                        disabled={field.disabled}
                       />
                     </FormControl>
                     <FormMessage />
@@ -162,13 +206,13 @@ const AddPremiumAccount = ({ userId }: { userId: string }) => {
                 )}
               />
 
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" disabled={loading} className="w-full">
                 {loading ? (
                   <>
-                    <Spinner /> Saving...
+                    <Spinner /> Submitting...
                   </>
                 ) : (
-                  "Save ✅"
+                  "Submit Request"
                 )}
               </Button>
             </form>

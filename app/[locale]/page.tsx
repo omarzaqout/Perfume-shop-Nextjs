@@ -89,8 +89,7 @@ export default async function HomePage() {
 
         <BrandGrid brands={brands} />
 
-        {role === "CLIENT" && <AddPremiumAccount userId={userId} />}
-
+        {userId && role === "CLIENT" && <AddPremiumAccount userId={userId} />}
         {role === "ADMIN" && (
           <div>
             {" "}
@@ -105,7 +104,6 @@ export default async function HomePage() {
           </>
         )}
       </div>
-      <SimpleBottomNavigation />
     </div>
   );
 }
