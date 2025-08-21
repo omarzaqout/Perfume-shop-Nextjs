@@ -1,15 +1,19 @@
 import { getTranslations } from "next-intl/server";
 import { getBrandByIdAction } from "@/actions/brand.action";
 import { getProductsByBrandActions } from "@/actions/product.action";
+import { getCategoryListActions } from "@/actions/category.action";
 import ProductGrid from "@/components/ProductGrid";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import BrandCategoryFilter from "@/components/BrandCategoryFilter";
 
 type Props = {
-  params: { id: string; locale: string };
+  params: Promise<{ id: string; locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // Await params first
   const { id: brandId, locale } = await params;
   const brand = await getBrandByIdAction(brandId);
 
@@ -32,26 +36,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BrandPage({
-  params,
-}: {
-  params: {
-    id: string;
-    locale: string;
-  };
-}) {
-  const { id: brandId } = await params;
+export default async function BrandPage(props: Props) {
+  // Await both params and searchParams
+  const [params, searchParams] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ]);
+  
+  const { id: brandId, locale } = params;
+  const selectedCategory =
+    typeof searchParams.category === "string" ? searchParams.category : undefined;
 
-  const [brand, initialProducts] = await Promise.all([
+  const [brand, categories, initialProducts] = await Promise.all([
     getBrandByIdAction(brandId),
-    getProductsByBrandActions(brandId, "", 0, 10),
+    getCategoryListActions(),
+    getProductsByBrandActions(brandId, "", 0, 10, selectedCategory),
   ]);
 
   if (!brand) {
     notFound();
   }
 
-  const t = await getTranslations("BrandPage");
+  const t = await getTranslations({ locale, namespace: "BrandPage" });
 
   return (
     <div className="container mx-auto px-4 py-8 sm:py-12">
@@ -63,9 +69,15 @@ export default async function BrandPage({
           {t("browsePrompt", { brandName: brand.name })}
         </p>
       </div>
+      
+      <BrandCategoryFilter categories={categories} allCategoriesLabel={t("allCategories")} />
 
       {initialProducts.length > 0 ? (
-        <ProductGrid initialProducts={initialProducts} brandId={brandId} />
+        <ProductGrid
+          initialProducts={initialProducts}
+          brandId={brandId}
+          categoryId={selectedCategory}
+        />
       ) : (
         <div className="text-center py-16">
           <p className="text-xl text-muted-foreground">{t("noProducts")}</p>
