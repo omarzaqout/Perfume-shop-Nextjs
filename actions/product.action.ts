@@ -31,76 +31,95 @@ export async function getProductListActions(searchTerm?: string, skip = 0, take 
 }
 
 export async function getProductsByCategoryActions(
-    categoryId: string,
-    search: string = "",
-    skip = 0,
-    take = 10
+  categoryId: string,
+  search: string = "",
+  skip = 0,
+  take = 10,
+  brandId?: string
 ) {
-    return await prisma.product.findMany({
-        where: {
-            categoryId: categoryId,
-            OR: search
-                ? [
-                    { name: { contains: search, mode: "insensitive" } },
-                    { description: { contains: search, mode: "insensitive" } },
-                ]
-                : undefined,
+
+  const where: any = {
+    categoryId: categoryId,
+  };
+
+
+  if (search) {
+    where.OR = [
+      { name: { contains: search, mode: "insensitive" } },
+      { description: { contains: search, mode: "insensitive" } },
+    ];
+  }
+
+
+  if (brandId) {
+    where.brandId = brandId;
+  }
+
+  return await prisma.product.findMany({
+    where,
+    orderBy: {
+      createdAt: "desc",
+    },
+    skip,
+    take,
+    include: {
+      brand: {
+        select: {
+          name: true,
         },
-        orderBy: {
-            createdAt: "desc",
+      },
+      category: {
+        select: {
+          name: true,
         },
-        skip,
-        take,
-        include: {
-            brand: {
-                select: {
-                    name: true,
-                },
-            },
-            category: {
-                select: {
-                    name: true,
-                },
-            },
-        },
-    });
+      },
+    },
+  });
 }
 
-
 export async function getProductsByBrandActions(
-    brandId: string,
-    search: string = "",
-    skip = 0,
-    take = 10
+  brandId: string,
+  search: string = "",
+  skip = 0,
+  take = 10,
+  categoryId?: string
 ) {
-    return await prisma.product.findMany({
-        where: {
-            brandId: brandId,
-            OR: search
-                ? [
-                    { name: { contains: search, mode: "insensitive" } },
-                    { description: { contains: search, mode: "insensitive" } },
-                ]
-                : undefined,
+
+  const where: any = {
+    brandId: brandId,
+  };
+
+  if (search) {
+    where.OR = [
+      { name: { contains: search, mode: "insensitive" } },
+      { description: { contains: search, mode: "insensitive" } },
+    ];
+  }
+
+  if (categoryId) {
+    where.categoryId = categoryId;
+  }
+
+  return await prisma.product.findMany({
+    where,
+    orderBy: {
+      createdAt: "desc",
+    },
+    skip,
+    take,
+    include: {
+      brand: {
+        select: {
+          name: true,
         },
-        orderBy: {
-            createdAt: "desc",
+      },
+      category: {
+        select: {
+          name: true,
         },
-        skip,
-        take,
-        include: {
-            brand: {
-                select: {
-                    name: true,
-                },
-            },
-            category: {
-                select: {
-                    name: true,
-                },
-            },
-        },
-    });
+      },
+    },
+  });
 }
 
 

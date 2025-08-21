@@ -1,3 +1,4 @@
+import { Link } from "@/i18n/navigation";
 import React from "react";
 
 interface Brand {
@@ -14,11 +15,11 @@ const BrandGrid = ({ brands }: { brands: Brand[] }) => {
   return (
     <div className="flex flex-wrap justify-center gap-6 mt-10">
       {brands.map((b) => (
-        <div
-          key={b.id}
-          className="flex flex-col items-center border-2 border-transparent hover:border-primary p-2 rounded-md transition-all"
-        >
-          {b.logoUrl ? (
+        <Link href={`/brand/${b.id}`} key={b.id} className="flex flex-col items-center">
+          <div
+            className="flex flex-col items-center border-2 border-transparent hover:border-primary p-2 rounded-md transition-all"
+          >
+            {b.logoUrl ? (
             <img
               src={b.logoUrl}
               alt={b.name}
@@ -31,6 +32,7 @@ const BrandGrid = ({ brands }: { brands: Brand[] }) => {
           )}
           <span className="mt-2 text-sm font-medium">{b.name}</span>
         </div>
+        </Link>
       ))}
     </div>
   );

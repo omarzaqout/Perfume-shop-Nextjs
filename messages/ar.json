@@ -16,17 +16,19 @@
   },
 
   "Metadata": {
-    "storeName": "متجري الرائع",
+    "storeName": "متجر العطور",
     "categoryDescription": "تصفح أفضل المنتجات في فئة {categoryName}.",
     "brandDescription": "تصفح عطور {brandName}."
   },
   "CategoryPage": {
     "browsePrompt": "تصفح أحدث المنتجات في فئة {categoryName}",
-    "noProducts": "عذراً، لا توجد منتجات في هذه الفئة حالياً."
+    "noProducts": "عذراً، لا توجد منتجات في هذه الفئة حالياً.",
+    "allBrands": "كل الماركات"
   },
-  "BrandPage": {
+   "BrandPage": {
     "browsePrompt": "تصفح عطور {brandName}.",
-    "noProducts": "لا توجد منتجات متاحة لهذه العلامة التجارية."
+    "noProducts": "لا توجد منتجات متاحة لهذه العلامة التجارية.",
+    "allCategories": "كل الفئات"
   },
   "AppBar": {
     "searchPlaceholder": "ابحث عن عطرك...",

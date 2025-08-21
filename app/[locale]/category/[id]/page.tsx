@@ -1,15 +1,22 @@
+// في ملف [id]/page.tsx الخاص بالتصنيف
+
 import { getTranslations } from "next-intl/server";
 import { getCategoryByIdAction } from "@/actions/category.action";
 import { getProductsByCategoryActions } from "@/actions/product.action";
+import { getBrandListActions } from "@/actions/brand.action";
 import ProductGrid from "@/components/ProductGrid";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import CategoryBrandFilter from "@/components/CategoryBrandFilter"; 
 
 type Props = {
-  params: { id: string; locale: string };
+  params: Promise<{ id: string; locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: Omit<Props, "searchParams">): Promise<Metadata> {
   const { id: categoryId, locale } = await params;
   const category = await getCategoryByIdAction(categoryId);
 
@@ -32,25 +39,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: {
-    id: string;
-    locale: string;
-  };
-}) {
-  const { id: categoryId } = await params;
+export default async function CategoryPage(props: Props) {
+  const [params, searchParams] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ]);
+  
+  const { id: categoryId, locale } = params;
+  const selectedBrand =
+    typeof searchParams.brand === "string" ? searchParams.brand : undefined;
 
-  const [category, initialProducts] = await Promise.all([
+  const [category, brands, initialProducts] = await Promise.all([
     getCategoryByIdAction(categoryId),
-    getProductsByCategoryActions(categoryId, "", 0, 10),
+    getBrandListActions(),
+    getProductsByCategoryActions(categoryId, "", 0, 10, selectedBrand),
   ]);
 
   if (!category) {
     notFound();
   }
-  const t = await getTranslations("CategoryPage");
+  const t = await getTranslations({ locale, namespace: "CategoryPage" });
 
   return (
     <div className="container mx-auto px-4 py-8 sm:py-12">
@@ -63,10 +71,13 @@ export default async function CategoryPage({
         </p>
       </div>
 
+      <CategoryBrandFilter brands={brands} allBrandsLabel={t("allBrands")} />
+
       {initialProducts.length > 0 ? (
         <ProductGrid
           initialProducts={initialProducts}
           categoryId={categoryId}
+          brandId={selectedBrand}
         />
       ) : (
         <div className="text-center py-16">

@@ -15,18 +15,21 @@
     }
   },
    "Metadata": {
-    "storeName": "My Awesome Store",
+    "storeName": "Perfume Store",
     "categoryDescription": "Browse the best products in the {categoryName} category.",
     "brandDescription": "Discover perfumes from {brandName}."
 
   },
   "CategoryPage": {
     "browsePrompt": "Browse the latest products in the {categoryName} category",
-    "noProducts": "Sorry, there are no products in this category at the moment."
+    "noProducts": "Sorry, there are no products in this category at the moment.",
+    "allBrands": "All Brands"
   },
   "BrandPage": {
     "browsePrompt": "Browse perfumes from the {brandName} brand",
-    "noProducts": "No products found for this brand."
+    "noProducts": "No products found for this brand.",
+    "allCategories": "All Categories"
+
   },
   "AppBar": {
     "searchPlaceholder": "Search for your perfume...",

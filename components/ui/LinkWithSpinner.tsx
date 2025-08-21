@@ -49,7 +49,7 @@ export const LinkWithSpinner = ({
       {children}
       {isLoading && (
         <Loader2
-          className="absolute top-1/2 -translate-y-1/2 h-4 w-4 animate-spin 
+          className="absolute top-1/2 mx-[2px] -translate-y-1/2 h-5 w-5 animate-spin 
                ltr:right-0 rtl:left-0"
         />
       )}
