@@ -67,18 +67,18 @@ export async function addPrimumAccountAction({
 }
 
 export async function getUserSellerRequest(userId: string) {
-  if (!userId) return null;
+    if (!userId) return null;
 
-  try {
-    const request = await prisma.sellerRequest.findFirst({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-    });
-    return request;
-  } catch (error) {
-    console.error("Failed to fetch seller request:", error);
-    return null;
-  }
+    try {
+        const request = await prisma.sellerRequest.findFirst({
+            where: { userId },
+            orderBy: { createdAt: 'desc' },
+        });
+        return request;
+    } catch (error) {
+        console.error("Failed to fetch seller request:", error);
+        return null;
+    }
 }
 
 
