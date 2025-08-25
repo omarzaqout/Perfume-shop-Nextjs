@@ -27,7 +27,9 @@
     "submit": "Submit Request",
     "submitting": "Submitting...",
     "successTitle": "Request Sent!",
-    "successDescription": "Your request to become a seller has been submitted. We will review it shortly."
+    "successDescription": "Your request to become a seller has been submitted. We will review it shortly.",
+    "AlertTitle": "Previous Application Not Approved",
+    "AlertDescription": "Your last request was not approved. Please review your information and submit again."
   },
     "badge": "Exclusive",
     "title": "Elevate Your Business, Become a Seller Today",
@@ -52,6 +54,7 @@
       "button": "Sign In"
     },
     "status": {
+      "resubmitButton": "Resubmit Request",
       "PENDING": {
         "title": "Your Request is Under Review",
         "description": "We have successfully received your application. Our team is currently reviewing it and you will be notified of the decision soon. Thank you for your patience!"
