@@ -1,4 +1,3 @@
-
 import { getTranslations } from "next-intl/server";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import {
@@ -8,21 +7,28 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { CheckCircle, Clock, DollarSign, Rocket, Users } from "lucide-react";
+import { CheckCircle, Clock, DollarSign, Rocket, Users, XCircle } from "lucide-react";
 import PremiumRequestForm from "@/components/forms/PremiumRequestForm";
 import { auth } from "@clerk/nextjs/server";
 
-// مكون صغير لعرض حالة الطلب
+// مكون لعرض حالة الطلب - مع أيقونات مختلفة لكل حالة
 const RequestStatusCard = async ({ status, locale }: { status: string, locale: string }) => {
   const t = await getTranslations({ locale, namespace: "PremiumPage.status" });
-  const isPending = status === "PENDING";
-  const Icon = isPending ? Clock : CheckCircle;
+  
+  const statusConfig = {
+    PENDING: { Icon: Clock, color: "text-primary" },
+    APPROVED: { Icon: CheckCircle, color: "text-green-500" },
+    REJECTED: { Icon: XCircle, color: "text-destructive" },
+  };
+
+  // اختيار الأيقونة واللون بناءً على الحالة
+  const { Icon, color } = statusConfig[status as keyof typeof statusConfig] || statusConfig.PENDING;
 
   return (
     <Card className="max-w-md mx-auto mt-10 text-center">
       <CardHeader>
-        <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit">
-          <Icon className="w-8 h-8 text-primary" />
+        <div className={`mx-auto bg-primary/10 p-3 rounded-full w-fit`}>
+          <Icon className={`w-8 h-8 ${color}`} />
         </div>
         <CardTitle className="mt-4">{t(`${status}.title`)}</CardTitle>
       </CardHeader>
@@ -32,12 +38,15 @@ const RequestStatusCard = async ({ status, locale }: { status: string, locale: s
     </Card>
   );
 };
-
 export default async function PremiumPage({ params }: { params: { locale: string } }) {
   const { locale } = await Promise.resolve(params);
   const t = await getTranslations({ locale, namespace: "PremiumPage" });
   const { userId } = await auth();
   const existingRequest = userId ? await getUserSellerRequest(userId) : null;
+
+
+ const rejectedRequest = existingRequest?.status === 'REJECTED' ? existingRequest : undefined;
+const pendingOrApprovedRequest = existingRequest && (existingRequest.status === 'PENDING' || existingRequest.status === 'APPROVED');
 
   const features = [
     {
@@ -106,10 +115,13 @@ export default async function PremiumPage({ params }: { params: { locale: string
         </SignedOut>
 
         <SignedIn>
-          {existingRequest ? (
-            <RequestStatusCard status={existingRequest.status} locale={locale} />
+          {pendingOrApprovedRequest ? (
+            // إذا كان الطلب معلقًا أو مقبولًا، اعرض حالته
+            <RequestStatusCard status={existingRequest!.status} locale={locale} />
           ) : (
-            <PremiumRequestForm userId={userId!} />
+            // وإلا (إذا لم يكن هناك طلب أو كان مرفوضًا)، اعرض الفورم
+            // ومرر بيانات الطلب المرفوض إليه
+            <PremiumRequestForm userId={userId!} rejectedRequest={rejectedRequest} />
           )}
         </SignedIn>
       </div>

@@ -24,11 +24,22 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { CheckCircle } from "lucide-react";
+import { AlertCircle, CheckCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 
-const PremiumRequestForm = ({ userId }: { userId: string }) => {
+type SellerRequestProps = {
+  id: string;
+  name: string;
+  description?: string | null;
+  phone?: number | null;
+  address?: string | null;
+  logoUrl?: string | null;
+};
+
+
+const PremiumRequestForm = ({ userId, rejectedRequest }: { userId: string; rejectedRequest?: SellerRequestProps }) => {
   const t = useTranslations("PremiumPage.form");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -36,18 +47,16 @@ const PremiumRequestForm = ({ userId }: { userId: string }) => {
   const form = useForm({
     resolver: zodResolver(premiumAccountFormSchema),
     defaultValues: {
-      storeName: "",
-      description: "",
-      Phone: undefined,
-      address: "",
+      storeName: rejectedRequest?.name || "",
+      description: rejectedRequest?.description || "",
+      Phone: rejectedRequest?.phone || undefined,
+      address: rejectedRequest?.address || "",
       image: undefined,
     },
     mode: "onChange",
   });
 
-  const onSubmit = async (
-    values: z.infer<typeof premiumAccountFormSchema>
-  ): Promise<void> => {
+const onSubmit = async (values: z.infer<typeof premiumAccountFormSchema>): Promise<void> => {
     setLoading(true);
     try {
       let logoUrl = "";
@@ -102,6 +111,15 @@ const PremiumRequestForm = ({ userId }: { userId: string }) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {rejectedRequest && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>{t("AlertTitle")}</AlertTitle>
+            <AlertDescription>
+              {t("AlertDescription")}
+            </AlertDescription>
+          </Alert>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField

@@ -110,7 +110,7 @@ export async function updateSellerRequestStatus(
 
         if (!request) throw new Error("Request not found");
 
-        await prisma.sellerRequest.update({
+        const updatedRequest = await prisma.sellerRequest.update({
             where: { id: requestId },
             data: { status: status as RequestStatus },
         });
@@ -122,7 +122,9 @@ export async function updateSellerRequestStatus(
             });
         }
 
-        return { success: true };
+        revalidatePath("/requests");
+
+        return { success: true, request: updatedRequest };
     } catch (error) {
         console.error(error);
         return { success: false, message: "Something went wrong" };
