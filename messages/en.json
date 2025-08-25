@@ -97,7 +97,9 @@
     "closeMenu": "Close Menu",
      "premium": "Premium",
     "seller": "Seller",
-    "admin": "Admin"
+    "admin": "Admin",
+    "sellerPanel": "Seller Dashboard",
+    "adminPanel": "Admin Panel"
   },
   "Sidebar": {
     "storeName": "Perfume Store",
