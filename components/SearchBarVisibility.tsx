@@ -5,13 +5,15 @@ import SearchBar from "./SearchBar";
 
 export default function SearchBarVisibility() {
   const pathname = usePathname();
-  
-  // إخفاء SearchBar في صفحة Premium
-  const isPremiumPage = pathname.includes('/premium');
-  
+
+  const isPremiumPage =
+    pathname.includes("/premium") ||
+    pathname.includes("/cart") ||
+    pathname.includes("/requests");
+
   if (isPremiumPage) {
     return null;
   }
-  
+
   return <SearchBar />;
 }

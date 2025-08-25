@@ -42,7 +42,6 @@ export function TableRequests({ requests }: TableRequestsProps) {
         message: `Request ${status.toLowerCase()} successfully!`,
       });
 
-      // إخفاء التنبيه بعد 3 ثواني
       setTimeout(() => setAlert({ show: false }), 3000);
     } catch (error) {
       setAlert({ show: true, message: `Failed to update request.` });
