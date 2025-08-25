@@ -96,7 +96,9 @@
     "closeMenu": "إغلاق القائمة",
      "premium": "العضوية المميزة",
     "seller": "بائع",
-    "admin": "مدير"
+    "admin": "مدير",
+    "sellerPanel": "لوحة البائع",
+    "adminPanel": "لوحة التحكم"
   },
   "Sidebar": {
     "storeName": "متجر العطور",
