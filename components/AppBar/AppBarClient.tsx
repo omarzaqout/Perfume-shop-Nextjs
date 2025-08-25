@@ -64,10 +64,10 @@ export default function AppBarClient({ role, t }: AppBarClientProps) {
                 )}
 
                 {role === "SELLER" && (
-                  <div className="flex items-center gap-1 text-sm font-medium text-green-600">
+                  <Link href="/premium" className="flex items-center gap-1 text-sm font-medium text-green-600">
                     <UserCheck size={16} />
                     <span>{t.seller}</span>
-                  </div>
+                  </Link>
                 )}
 
                 {role === "ADMIN" && (
