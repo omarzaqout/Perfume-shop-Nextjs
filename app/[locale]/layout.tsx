@@ -15,7 +15,7 @@ import {
   Sidebar,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import AppBar from "@/components/AppBar";
+import AppBar from "@/components/AppBar/index";
 import PerfumeSidebar from "@/components/PerfumeSidebar";
 import { SearchProvider } from "@/context/SearchContext";
 import SearchBarVisibility from "@/components/SearchBarVisibility";
@@ -73,7 +73,7 @@ export default async function RootLayout({
                 <SearchProvider>
                   {" "}
                   <div className="flex flex-col h-screen w-full">
-                    <AppBar />
+                    <AppBar locale={locale} />
                     <div className="flex flex-1 overflow-hidden">
                       <Sidebar
                         side={isRTL ? "right" : "left"}
