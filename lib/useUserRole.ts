@@ -1,3 +1,5 @@
+// lib/useUserRole.ts
+
 import { createUserAction, getUserByIdAction } from "@/actions/user.action";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
