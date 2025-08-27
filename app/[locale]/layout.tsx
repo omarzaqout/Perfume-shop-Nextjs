@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { notFound } from "next/navigation";
-import SimpleBottomNavigation from "@/components/ButtomBar";
+import BottomBar from "@/components/ButtomBar";
 
 import { ThemeProvider } from "@/provider/theme-provider";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -71,7 +71,6 @@ export default async function RootLayout({
             <NextIntlClientProvider locale={locale} messages={messages}>
               <SidebarProvider>
                 <SearchProvider>
-                  {" "}
                   <div className="flex flex-col h-screen w-full">
                     <AppBar locale={locale} />
                     <div className="flex flex-1 overflow-hidden">
@@ -82,7 +81,7 @@ export default async function RootLayout({
                         <PerfumeSidebar />
                       </Sidebar>
 
-                      <main className="bg-background flex flex-col mt-3 w-full p-1 sm:p-5">
+                      <main className="bg-background flex flex-col mt-3 w-full p-1 sm:p-5 flex-1">
                         <div className="flex p-1 sm:p-0">
                           <SidebarTrigger className="p-2 m-2 rounded-lg hover:bg-accent" />
                           <div className="w-full">
@@ -90,12 +89,13 @@ export default async function RootLayout({
                           </div>
                         </div>
 
-                        <div className="p-5 sm:mt-6 mt-1 w-full h-screen overflow-y-auto no-scrollbar">
+                        <div className="p-5 sm:mt-6 mt-1 w-full flex-1 overflow-y-auto no-scrollbar pb-20 md:pb-5">
                           {children}
                         </div>
                       </main>
                     </div>
-                      <SimpleBottomNavigation />
+
+                    <BottomBar />
                   </div>
                 </SearchProvider>
               </SidebarProvider>
