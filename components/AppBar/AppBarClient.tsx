@@ -64,7 +64,10 @@ export default function AppBarClient({ role, t }: AppBarClientProps) {
                 )}
 
                 {role === "SELLER" && (
-                  <Link href="/premium" className="flex items-center gap-1 text-sm font-medium text-green-600">
+                  <Link
+                    href="/premium"
+                    className="flex items-center gap-1 text-sm font-medium text-green-600"
+                  >
                     <UserCheck size={16} />
                     <span>{t.seller}</span>
                   </Link>
@@ -104,6 +107,7 @@ export default function AppBarClient({ role, t }: AppBarClientProps) {
 
             <Link
               href="/cart"
+              id="cart-icon"
               className="relative p-2 rounded-full hover:bg-accent transition-colors"
               aria-label={t.cart}
             >
@@ -112,6 +116,7 @@ export default function AppBarClient({ role, t }: AppBarClientProps) {
                 2
               </span>
             </Link>
+
             <LocaleSwitcher />
             <ModeToggle />
           </div>

@@ -2,7 +2,6 @@ import { getTranslations } from "next-intl/server";
 import AddProductForm from "@/components/AddProductForm";
 import { getCategoryListActions } from "@/actions/category.action";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { createUserAction, getUserByIdAction } from "@/actions/user.action";
 import AddBrandForm from "@/components/AddBrandForm";
 import SimpleBottomNavigation from "@/components/ButtomBar";
 import { FaStar } from "react-icons/fa";
@@ -80,6 +79,7 @@ export default async function HomePage() {
             initialProducts={initialProducts}
             loadMoreAction={loadMoreProducts}
             hasMore={initialProducts.length === 10}
+            userId={userId}
           />
         ) : (
           <div className="text-center py-8">

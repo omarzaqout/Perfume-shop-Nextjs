@@ -6,6 +6,7 @@ import ProductGrid from "@/components/ProductGrid";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import BrandCategoryFilter from "@/components/BrandCategoryFilter";
+import { getUserRole } from "@/lib/useUserRole";
 
 type Props = {
   params: Promise<{ id: string; locale: string }>;
@@ -42,10 +43,12 @@ export default async function BrandPage(props: Props) {
     props.params,
     props.searchParams,
   ]);
-  
+
   const { id: brandId, locale } = params;
   const selectedCategory =
-    typeof searchParams.category === "string" ? searchParams.category : undefined;
+    typeof searchParams.category === "string"
+      ? searchParams.category
+      : undefined;
 
   const [brand, categories, initialProducts] = await Promise.all([
     getBrandByIdAction(brandId),
@@ -58,6 +61,7 @@ export default async function BrandPage(props: Props) {
   }
 
   const t = await getTranslations({ locale, namespace: "BrandPage" });
+  const { userId } = await getUserRole();
 
   return (
     <div className="container mx-auto px-4 py-8 sm:py-12">
@@ -69,14 +73,18 @@ export default async function BrandPage(props: Props) {
           {t("browsePrompt", { brandName: brand.name })}
         </p>
       </div>
-      
-      <BrandCategoryFilter categories={categories} allCategoriesLabel={t("allCategories")} />
+
+      <BrandCategoryFilter
+        categories={categories}
+        allCategoriesLabel={t("allCategories")}
+      />
 
       {initialProducts.length > 0 ? (
         <ProductGrid
           initialProducts={initialProducts}
           brandId={brandId}
           categoryId={selectedCategory}
+          userId={userId}
         />
       ) : (
         <div className="text-center py-16">

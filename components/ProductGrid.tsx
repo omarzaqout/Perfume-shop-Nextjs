@@ -1,13 +1,13 @@
 "use client";
 import { useState, useEffect, useTransition, useRef } from "react";
 import { useSearch } from "@/context/SearchContext";
-import ProductCard from "@/components/ProductCard";
 import {
   getProductListActions,
   getProductsByCategoryActions,
-  getProductsByBrandActions, // ✅ استدعاء الدالة الجديدة
+  getProductsByBrandActions,
 } from "@/actions/product.action";
 import { ProductGridSkeleton } from "./Skeleton";
+import ProductCard from "./ProductCard";
 
 type Product = {
   brand: { name: string };
@@ -31,6 +31,7 @@ type ProductGridProps = {
   categoryId?: string;
   brandId?: string; // ✅ أضفنا brandId
   searchQuery?: string;
+  userId?: string;
 };
 
 export default function ProductGrid({
@@ -38,8 +39,9 @@ export default function ProductGrid({
   loadMoreAction,
   hasMore: initialHasMore = true,
   categoryId,
-  brandId, // ✅ استقباله كمُدخل
+  brandId,
   searchQuery = "",
+  userId,
 }: ProductGridProps) {
   const { searchQuery: contextSearchQuery } = useSearch();
   const effectiveSearchQuery = searchQuery || contextSearchQuery;
@@ -114,7 +116,7 @@ export default function ProductGrid({
         <>
           <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-5 gap-4">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} userId={userId} />
             ))}
           </div>
 

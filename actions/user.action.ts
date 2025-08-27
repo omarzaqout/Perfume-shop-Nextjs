@@ -16,7 +16,7 @@ export async function createUserAction({ id, email, name }: IUser) {
     await prisma.user.create({
         data: { id, email, name, role: "CLIENT", },
     });
-    revalidatePath("/");
+
 }
 
 export async function getUserByIdAction(id: string) {

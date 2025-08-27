@@ -125,5 +125,12 @@
     "discover": "اكتشف",
     "cart": "السلة",
     "account": "حسابي"
+  },
+
+  "AddToCart": {
+    "login_required": "يجب تسجيل الدخول",
+    "please_login_to_add_items": "يرجى تسجيل الدخول لإضافة منتجات إلى السلة",
+    "added_to_cart": "تمت الإضافة إلى السلة بنجاح!",
+    "product_added_successfully": "تمت إضافة المنتج بنجاح!"
   }
 }

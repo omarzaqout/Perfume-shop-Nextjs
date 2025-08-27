@@ -137,3 +137,20 @@
 .scroll-hide::-webkit-scrollbar {
   display: none; 
 }
+
+
+@keyframes cart-bounce {
+  0% { transform: rotate(0deg) translateX(0) scale(1); }
+  15% { transform: rotate(-15deg) translateX(-5px) scale(1.1); }
+  30% { transform: rotate(15deg) translateX(5px) scale(1.1); }
+  45% { transform: rotate(-10deg) translateX(-3px) scale(1.05); }
+  60% { transform: rotate(10deg) translateX(3px) scale(1.05); }
+  75% { transform: rotate(-5deg) translateX(-2px) scale(1.02); }
+  90% { transform: rotate(5deg) translateX(2px) scale(1.02); }
+  100% { transform: rotate(0deg) translateX(0) scale(1); }
+}
+
+.cart-animate {
+  animation: cart-bounce 0.7s ease-in-out;
+}
+

@@ -5,85 +5,154 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { FaShoppingCart } from "react-icons/fa";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { AlertCircle, CheckCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import { addToCart } from "@/actions/cart.action";
 
 type Product = {
+  brand: { name: string };
   id: string;
   name: string;
   description: string;
   price: number;
   imageUrl: string;
   quantity: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   categoryId: string;
   brandId: string;
-  brand?: {
-    name: string;
-  };
+  category?: { name: string };
 };
 
 interface ProductCardProps {
   product: Product;
   priority?: boolean;
   animationDelay?: number;
+  userId?: string;
 }
 
 export default function ProductCard({
   product,
   priority = false,
   animationDelay = 0,
+  userId,
 }: ProductCardProps) {
+  const t = useTranslations("AddToCart");
+
+  const [alert, setAlert] = useState<null | "login" | "added">(null);
+
+  // Alert فوق الصفحة
+  const AlertPortal = () => {
+    if (!alert) return null;
+
+    const isLogin = alert === "login";
+
+    return createPortal(
+      <Alert
+        variant={isLogin ? "destructive" : "default"}
+        className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[300px]"
+      >
+        {isLogin ? (
+          <AlertCircle className="h-4 w-4" />
+        ) : (
+          <CheckCircle className="h-4 w-4" />
+        )}
+        <AlertTitle>
+          {isLogin ? t("login_required") : t("added_to_cart")}
+        </AlertTitle>
+        <AlertDescription>
+          {isLogin
+            ? t("please_login_to_add_items")
+            : t("product_added_successfully")}
+        </AlertDescription>
+      </Alert>,
+      document.body
+    );
+  };
+
+  const handleAddToCart = async () => {
+    if (!userId) return;
+    try {
+      await addToCart(userId, product.id, 1);
+      setAlert("added");
+      setTimeout(() => setAlert(null), 3000);
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+    }
+  };
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: animationDelay }}
-      className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all hover:shadow-md"
-    >
-      <Link href={`/product/${product.id}`} className="flex flex-col h-full">
-        <div className="relative overflow-hidden aspect-square bg-gray-100 dark:bg-gray-800">
-          <Image
-            src={product.imageUrl}
-            alt={product.name}
-            fill
-            priority={priority}
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          />
-        </div>
+    <>
+      <AlertPortal />
 
-        <div className="flex flex-1 flex-col p-4">
-          <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            {product.brand?.name ?? "Unknown"}
-          </h3>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: animationDelay }}
+        className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all hover:shadow-md"
+      >
+        <Link href={`/product/${product.id}`} className="flex flex-col h-full">
+          <div className="relative overflow-hidden aspect-square bg-gray-100 dark:bg-gray-800">
+            <Image
+              src={product.imageUrl}
+              alt={product.name}
+              fill
+              priority={priority}
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
 
-          <h2 className="mt-1 text-sm font-semibold text-foreground line-clamp-2 h-8">
-            {product.name}
-          </h2>
+          <div className="flex flex-1 flex-col p-4">
+            <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              {product.brand?.name ?? "Unknown"}
+            </h3>
 
-          <p className="mt-1 text-xs text-muted-foreground line-clamp-2 h-8">
-            {product.description}
-          </p>
+            <h2 className="mt-1 text-sm font-semibold text-foreground line-clamp-2 h-8">
+              {product.name}
+            </h2>
 
-          <div className="mt-auto flex items-end justify-between pt-3">
-            <p className="text-lg font-bold text-primary">
+            <p className="mt-1 text-xs text-muted-foreground line-clamp-2 h-8">
+              {product.description}
+            </p>
+
+            <p className="mt-auto text-lg font-bold text-primary">
               ${product.price.toFixed(2)}
             </p>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              aria-label="Add to cart"
-              onClick={(e) => e.preventDefault()}
-              className={cn(
-                "flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all duration-300",
-                "opacity-100 md:opacity-0 md:group-hover:opacity-100"
-              )}
-            >
-              <FaShoppingCart size={14} />
-            </motion.button>
           </div>
-        </div>
-      </Link>
-    </motion.div>
+        </Link>
+
+        {/* زر السلة أسفل الكارد ويظهر فقط عند Hover */}
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          aria-label="Add to cart"
+          onClick={(e) => {
+            e.stopPropagation(); // يمنع Link
+            if (!userId) {
+              setAlert("login");
+              setTimeout(() => setAlert(null), 5000);
+              return;
+            }
+
+            const cartIcon = document.getElementById("cart-icon");
+            if (cartIcon) {
+              cartIcon.classList.add("cart-animate");
+              setTimeout(() => cartIcon.classList.remove("cart-animate"), 700);
+            }
+
+            handleAddToCart();
+          }}
+          className={cn(
+            "flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all duration-300",
+            "opacity-0 group-hover:opacity-100 absolute bottom-3 right-3"
+          )}
+        >
+          <FaShoppingCart size={14} />
+        </motion.button>
+      </motion.div>
+    </>
   );
 }

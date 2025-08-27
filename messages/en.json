@@ -124,5 +124,11 @@
     "discover": "Discover",
     "cart": "Cart",
     "account": "Account"
+  },
+  "AddToCart": {
+    "login_required": "Login Required",
+    "please_login_to_add_items": "Please log in to add items to your cart",
+    "added_to_cart": "Added to cart successfully!",
+    "product_added_successfully": "Product added successfully!"
   }
 }
