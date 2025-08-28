@@ -21,9 +21,14 @@ type AppBarClientProps = {
     sellerPanel: string;
     adminPanel: string;
   };
+  counterItems: number;
 };
 
-export default function AppBarClient({ role, t }: AppBarClientProps) {
+export default function AppBarClient({
+  role,
+  t,
+  counterItems,
+}: AppBarClientProps) {
   return (
     <header className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="container mx-auto px-4">
@@ -112,9 +117,11 @@ export default function AppBarClient({ role, t }: AppBarClientProps) {
               aria-label={t.cart}
             >
               <FiShoppingCart size={20} />
-              <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
-                2
-              </span>
+              {counterItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                  {counterItems}
+                </span>
+              )}
             </Link>
 
             <LocaleSwitcher />

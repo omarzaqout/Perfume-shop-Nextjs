@@ -1,5 +1,3 @@
-// في ملف [id]/page.tsx الخاص بالتصنيف
-
 import { getTranslations } from "next-intl/server";
 import { getCategoryByIdAction } from "@/actions/category.action";
 import { getProductsByCategoryActions } from "@/actions/product.action";
@@ -7,7 +5,8 @@ import { getBrandListActions } from "@/actions/brand.action";
 import ProductGrid from "@/components/ProductGrid";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import CategoryBrandFilter from "@/components/CategoryBrandFilter"; 
+import CategoryBrandFilter from "@/components/CategoryBrandFilter";
+import { getUserRole } from "@/lib/useUserRole";
 
 type Props = {
   params: Promise<{ id: string; locale: string }>;
@@ -44,7 +43,7 @@ export default async function CategoryPage(props: Props) {
     props.params,
     props.searchParams,
   ]);
-  
+
   const { id: categoryId, locale } = params;
   const selectedBrand =
     typeof searchParams.brand === "string" ? searchParams.brand : undefined;
@@ -59,6 +58,8 @@ export default async function CategoryPage(props: Props) {
     notFound();
   }
   const t = await getTranslations({ locale, namespace: "CategoryPage" });
+
+  const { userId } = await getUserRole();
 
   return (
     <div className="container mx-auto px-4 py-8 sm:py-12">
@@ -78,6 +79,7 @@ export default async function CategoryPage(props: Props) {
           initialProducts={initialProducts}
           categoryId={categoryId}
           brandId={selectedBrand}
+          userId={userId}
         />
       ) : (
         <div className="text-center py-16">
