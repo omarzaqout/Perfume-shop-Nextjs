@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import Image from "next/image";
 import { FaShoppingCart } from "react-icons/fa";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
@@ -11,6 +10,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { addToCart } from "@/actions/cart.action";
+import { Link } from '@/i18n/navigation';
 
 type Product = {
   brand: { name: string };

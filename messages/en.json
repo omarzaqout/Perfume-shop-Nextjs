@@ -14,6 +14,33 @@
       "buttonText": "Explore Now"
     }
   },
+   "ProductPage": {
+    "addToCart": "Add to Cart",
+    "quantity": "Quantity",
+    "description": "Description",
+    "brand": "Brand",
+    "category": "Category",
+    "sellerName": "Seller Name",
+    "contactSeller": "Contact Seller",
+    "productDetails": "Product Details",
+    "availability": "Availability",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "deliveryInfo": "Delivery Information",
+    "freeShipping": "Free Shipping",
+    "warranty": "Warranty",
+    "yearsWarranty": "Years Warranty",
+    "returnPolicy": "Return Policy",
+    "daysReturn": "Days Return",
+    "contactInfo": "Contact Information",
+    "email": "Email",
+    "phone": "Phone",
+    "storeInfo": "Store Information",
+    "since": "Since",
+    "storeDescription": "Store Description",
+    "address": "Address",
+    "aboutStore": "About Store"
+  },
 
     "PremiumPage": {
         "form": {

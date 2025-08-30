@@ -2,7 +2,6 @@
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { IProduct } from "@/interfaces";
-
 const prisma = new PrismaClient();
 
 export async function getProductListActions(searchTerm?: string, skip = 0, take = 10) {
@@ -147,3 +146,48 @@ export const createProductActions = async ({
     });
     revalidatePath("/");
 };
+
+export async function getProductByIdAction(productId: string) {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      include: {
+        brand: {
+          include: {
+            owner: true,
+          },
+        },
+        category: true,
+      },
+    });
+
+    if (!product) return null;
+
+    const sellerRequest = await prisma.sellerRequest.findFirst({
+      where: {
+        userId: product.brand.owner.id,
+        status: "APPROVED"
+      }
+    });
+
+    const productWithSellerDetails = {
+      ...product,
+      brand: {
+        ...product.brand,
+        owner: {
+          ...product.brand.owner,
+          companyName: sellerRequest?.name || product.brand.owner.name,
+          logoUrl: sellerRequest?.logoUrl || null,
+          phone: sellerRequest?.phone || null,
+          address: sellerRequest?.address || null,
+          description: sellerRequest?.description || null
+        }
+      }
+    };
+
+    return productWithSellerDetails;
+  } catch (error) {
+    console.error("Failed to fetch product:", error);
+    return null;
+  }
+}

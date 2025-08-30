@@ -9,7 +9,8 @@ export default function SearchBarVisibility() {
   const isPremiumPage =
     pathname.includes("/premium") ||
     pathname.includes("/cart") ||
-    pathname.includes("/requests");
+    pathname.includes("/requests") ||
+    pathname.includes("/product");
 
   if (isPremiumPage) {
     return null;
