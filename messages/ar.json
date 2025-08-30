@@ -15,6 +15,34 @@
     }
   },
 
+   "ProductPage": {
+    "addToCart": "أضف إلى السلة",
+    "quantity": "الكمية",
+    "description": "الوصف",
+    "brand": "الماركة",
+    "category": "التصنيف",
+    "sellerName": "اسم البائع",
+    "contactSeller": "تواصل مع البائع",
+    "productDetails": "تفاصيل المنتج",
+    "availability": "التوفر",
+    "inStock": "متوفر",
+    "outOfStock": "غير متوفر",
+    "deliveryInfo": "معلومات التوصيل",
+    "freeShipping": "شحن مجاني",
+    "warranty": "ضمان",
+    "yearsWarranty": "سنوات الضمان",
+    "returnPolicy": "سياسة الإرجاع",
+    "daysReturn": "أيام الإرجاع",
+    "contactInfo": "معلومات الاتصال",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "storeInfo": "معلومات المتجر",
+    "since": "منذ",
+    "storeDescription": "وصف المتجر",
+    "address": "العنوان",
+    "aboutStore": "عن المتجر"
+  },
+
  "PremiumPage": {
    "form": {
     "title": "نموذج طلب البائع",
