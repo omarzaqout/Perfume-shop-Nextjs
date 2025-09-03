@@ -6,7 +6,7 @@ import AddBrandForm from "@/components/AddBrandForm";
 import SimpleBottomNavigation from "@/components/ButtomBar";
 import { FaStar } from "react-icons/fa";
 import ProductGrid from "@/components/ProductGrid";
-import { getBrandListActions } from "@/actions/brand.action";
+import { getBrandListActions, getBrandsByOwnerIdActions } from "@/actions/brand.action";
 import AddCategoryForm from "@/components/AddCategoryForm";
 import BrandGrid from "@/components/BrandGrid";
 import CarouselComponent from "@/components/carocelComponent";
@@ -21,6 +21,8 @@ export default async function HomePage() {
   const { userId, role } = await getUserRole();
 
   const brands = await getBrandListActions();
+  const ownerBrands = await getBrandsByOwnerIdActions(userId);
+
   const initialProducts = await getProductListActions("", 0, 10);
 
   const loadMoreProducts = async (skip: number, take: number) => {
@@ -99,7 +101,7 @@ export default async function HomePage() {
 
         {role === "SELLER" && (
           <>
-            <AddProductForm categories={categories} userId={userId} />
+            <AddProductForm categories={categories} userId={userId} brands={ownerBrands} />
             <AddBrandForm userId={userId} />
           </>
         )}

@@ -29,6 +29,13 @@ export const productFormSchema = z.object({
     .length(24, {
       message: "Invalid category ID format (must be 24 characters)",
     }),
+
+    
+  BrandId: z
+    .string()
+    .length(24, {
+      message: "Invalid brand ID format (must be 24 characters)",
+    }),
 });
 
 export const categoryFormSchema = z.object({

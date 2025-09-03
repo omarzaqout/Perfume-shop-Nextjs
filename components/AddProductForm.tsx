@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { ICategory } from "@/interfaces";
+import {ICategory, OwnerBrand } from "@/interfaces";
 
 import {
   Dialog,
@@ -38,14 +38,16 @@ import {
   SelectValue,
 } from "./ui/select";
 import { createProductActions } from "@/actions/product.action";
-import { getBrandByOwnerIdActions } from "@/actions/brand.action";
+import { getBrandsByOwnerIdActions } from "@/actions/brand.action";
 
 const AddProductForm = ({
   categories,
   userId,
+  brands,
 }: {
   categories: ICategory[];
   userId: string | "";
+  brands: OwnerBrand[];
 }) => {
   console.log("Categories:", categories);
   const [loading, setLoading] = useState(false);
@@ -62,6 +64,7 @@ const AddProductForm = ({
       quantity: 1,
       image: undefined,
       categoryId: "",
+      BrandId: "",
     },
     mode: "onChange",
   });
@@ -90,9 +93,7 @@ const AddProductForm = ({
         imageUrl = data.url;
       }
 
-      const brand = await getBrandByOwnerIdActions(userId);
-
-      if (!brand) throw new Error("Brand not found");
+      if (!brands || brands.length === 0) throw new Error("Brand not found");
 
       await createProductActions({
         name: values.name,
@@ -101,7 +102,7 @@ const AddProductForm = ({
         imageUrl,
         quantity: values.quantity || 1,
         categoryId: values.categoryId,
-        brandId: brand.id,
+        brandId: values.BrandId,
       });
 
       setIsclose(false);
@@ -248,6 +249,32 @@ const AddProductForm = ({
                         {categories.map((category: ICategory) => (
                           <SelectItem key={category.id} value={category.id}>
                             {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+                            <FormField
+                control={form.control}
+                name="BrandId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Brands</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? ""}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select brand" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {brands.map((brand: OwnerBrand) => (
+                          <SelectItem key={brand.id} value={brand.id}>
+                            {brand.name}
                           </SelectItem>
                         ))}
                       </SelectContent>

@@ -154,7 +154,11 @@ export async function getProductByIdAction(productId: string) {
       include: {
         brand: {
           include: {
-            owner: true,
+            brandOwners: {
+              include: {
+                user: true,
+              },
+            },
           },
         },
         category: true,
@@ -163,26 +167,34 @@ export async function getProductByIdAction(productId: string) {
 
     if (!product) return null;
 
-    const sellerRequest = await prisma.sellerRequest.findFirst({
-      where: {
-        userId: product.brand.owner.id,
-        status: "APPROVED"
-      }
-    });
+    // نفرض أنه البراند له مالك واحد أو أول مالك هو المطلوب
+    const brandOwner = product.brand.brandOwners[0]?.user;
+
+    let sellerRequest = null;
+    if (brandOwner) {
+      sellerRequest = await prisma.sellerRequest.findFirst({
+        where: {
+          userId: brandOwner.id,
+          status: "APPROVED",
+        },
+      });
+    }
 
     const productWithSellerDetails = {
       ...product,
       brand: {
         ...product.brand,
-        owner: {
-          ...product.brand.owner,
-          companyName: sellerRequest?.name || product.brand.owner.name,
-          logoUrl: sellerRequest?.logoUrl || null,
-          phone: sellerRequest?.phone || null,
-          address: sellerRequest?.address || null,
-          description: sellerRequest?.description || null
-        }
-      }
+        owner: brandOwner
+          ? {
+              ...brandOwner,
+              companyName: sellerRequest?.name || brandOwner.name,
+              logoUrl: sellerRequest?.logoUrl || null,
+              phone: sellerRequest?.phone || null,
+              address: sellerRequest?.address || null,
+              description: sellerRequest?.description || null,
+            }
+          : null,
+      },
     };
 
     return productWithSellerDetails;

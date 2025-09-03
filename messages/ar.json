@@ -12,7 +12,9 @@
       "title": "مجموعة الصيف",
       "subtitle": "عطور منعشة وحيوية للأيام المشمسة.",
       "buttonText": "استكشف الآن"
-    }
+    },
+    "noProductsAvailable": "لا توجد منتجات متاحة"
+
   },
 
    "ProductPage": {
