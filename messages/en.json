@@ -12,7 +12,8 @@
       "title": "Summer Collection",
       "subtitle": "Refreshing and vibrant scents for sunny days.",
       "buttonText": "Explore Now"
-    }
+    },
+    "noProductsAvailable": "No products available"
   },
    "ProductPage": {
     "addToCart": "Add to Cart",

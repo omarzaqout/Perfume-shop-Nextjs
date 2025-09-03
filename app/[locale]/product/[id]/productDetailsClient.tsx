@@ -9,7 +9,6 @@ import { useLocale } from "next-intl";
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { addToCart } from "@/actions/cart.action";
 
-
 type SellerInfo = {
   id: string;
   name: string;
@@ -17,7 +16,6 @@ type SellerInfo = {
   phone?: number | null;
   createdAt?: Date;
   role?: string;
-
   companyName: string;
   logoUrl?: string | null;
   address?: string | null;
@@ -28,8 +26,9 @@ type BrandWithSeller = {
   id: string;
   name: string;
   logoUrl?: string | null;
-  owner: SellerInfo;
-  ownerId: string;
+  owner: SellerInfo | null; // جعل owner يمكن أن يكون null
+  ownerId?: string;
+  brandOwners?: any[];
 };
 
 type Product = {
@@ -44,8 +43,8 @@ type Product = {
     id: string;
     name: string;
   };
-  createdAt?: Date; // تغيير إلى Date بدلاً من string
-  updatedAt?: Date; // تغيير إلى Date بدلاً من string
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 type Translations = {
@@ -87,13 +86,16 @@ export default function ProductDetailsClient({
 }) {
   const [quantity, setQuantity] = useState(1);
   const locale = useLocale();
-    const [alert, setAlert] = useState<null | "login" | "added">(null);
-  
+  const [alert, setAlert] = useState<null | "login" | "added">(null);
 
   const handleAddToCart = async () => {
-    if (!userId) return;
+    if (!userId) {
+      setAlert("login");
+      setTimeout(() => setAlert(null), 3000);
+      return;
+    }
     try {
-      await addToCart(userId, product.id, 1);
+      await addToCart(userId, product.id, quantity);
       setAlert("added");
       setTimeout(() => setAlert(null), 3000);
     } catch (error) {
@@ -108,7 +110,6 @@ export default function ProductDetailsClient({
 
   const seller = product.brand.owner;
 
-  // دالة مساعدة لتنسيق التاريخ
   const formatDate = (date?: Date) => {
     if (!date) return "N/A";
     return new Date(date).toLocaleDateString(locale, {
@@ -119,18 +120,18 @@ export default function ProductDetailsClient({
   };
 
   return (
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
       {/* قسم الصورة */}
-<div className="relative aspect-square w-full max-w-md">
-  <Image
-    src={product.imageUrl}
-    alt={product.name}
-    fill
-    className="object-contain"
-    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-    priority
-  />
-</div>
+      <div className="relative aspect-square w-full max-w-md">
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          fill
+          className="object-contain"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority
+        />
+      </div>
 
       {/* قسم التفاصيل */}
       <div className="flex flex-col space-y-6">
@@ -211,76 +212,79 @@ export default function ProductDetailsClient({
           </div>
         </div>
 
-      <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
-        <h3 className="text-lg font-bold text-accent-foreground mb-4 flex items-center gap-2">
-          <Store className="w-5 h-5" />
-          {t.storeInfo}
-        </h3>
-        
-        {/* شعار الشركة */}
-        {seller.logoUrl && (
-          <div className="mb-4">
-            <Image
-              src={seller.logoUrl}
-              alt={seller.companyName}
-              width={80}
-              height={80}
-              className="rounded-lg object-contain"
-            />
+        {/* معلومات المتجر - عرض فقط إذا كان هناك بائع */}
+        {seller && (
+          <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
+            <h3 className="text-lg font-bold text-accent-foreground mb-4 flex items-center gap-2">
+              <Store className="w-5 h-5" />
+              {t.storeInfo}
+            </h3>
+            
+            {/* شعار الشركة */}
+            {seller.logoUrl && (
+              <div className="mb-4">
+                <Image
+                  src={seller.logoUrl}
+                  alt={seller.companyName}
+                  width={80}
+                  height={80}
+                  className="rounded-lg object-contain"
+                />
+              </div>
+            )}
+            
+            <div className="space-y-3">
+              {/* اسم الشركة */}
+              <div>
+                <h4 className="text-sm font-medium text-muted-foreground">{t.sellerName}</h4>
+                <p className="font-medium">{seller.companyName}</p>
+              </div>
+
+              {/* وصف المتجر */}
+              {seller.description && (
+                <div className="bg-muted/10 p-3 rounded-lg">
+                  <h4 className="text-sm font-medium text-muted-foreground mb-1">{t.aboutStore}</h4>
+                  <p className="text-sm text-muted-foreground">{seller.description}</p>
+                </div>
+              )}
+
+              {/* العنوان */}
+              {seller.address && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="w-4 h-4" />
+                  <span>{seller.address}</span>
+                </div>
+              )}
+
+              {/* معلومات التواصل */}
+              <div>
+                <h4 className="text-sm font-medium text-muted-foreground mb-2">{t.contactInfo}</h4>
+                <div className="space-y-2">
+                  {seller.email && (
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-sm">{seller.email}</span>
+                    </div>
+                  )}
+                  {seller.phone && (
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-sm">{seller.phone}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* تاريخ انضمام البائع */}
+              {seller.createdAt && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Clock className="w-4 h-4" />
+                  <span>{t.since} {formatDate(seller.createdAt)}</span>
+                </div>
+              )}
+            </div>
           </div>
         )}
-        
-        <div className="space-y-3">
-          {/* اسم الشركة */}
-          <div>
-            <h4 className="text-sm font-medium text-muted-foreground">{t.sellerName}</h4>
-            <p className="font-medium">{seller.companyName}</p>
-          </div>
-
-          {/* وصف المتجر (من sellerRequest) */}
-          {seller.description && (
-            <div className="bg-muted/10 p-3 rounded-lg">
-              <h4 className="text-sm font-medium text-muted-foreground mb-1">{t.aboutStore}</h4>
-              <p className="text-sm text-muted-foreground">{seller.description}</p>
-            </div>
-          )}
-
-          {/* العنوان (من sellerRequest) */}
-          {seller.address && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <MapPin className="w-4 h-4" />
-              <span>{seller.address}</span>
-            </div>
-          )}
-
-          {/* معلومات التواصل */}
-          <div>
-            <h4 className="text-sm font-medium text-muted-foreground mb-2">{t.contactInfo}</h4>
-            <div className="space-y-2">
-              {seller.email && (
-                <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">{seller.email}</span>
-                </div>
-              )}
-              {seller.phone && (
-                <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">{seller.phone}</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* تاريخ انضمام البائع */}
-          {seller.createdAt && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Clock className="w-4 h-4" />
-              <span>{t.since} {formatDate(seller.createdAt)}</span>
-            </div>
-          )}
-        </div>
-      </div>
 
         {/* أزرار التحكم بالكمية والإضافة للسلة */}
         <div className="mt-4 flex flex-col sm:flex-row items-stretch gap-4">
@@ -316,6 +320,20 @@ export default function ProductDetailsClient({
             {product.quantity === 0 ? t.outOfStock : t.addToCart}
           </Button>
         </div>
+
+        {/* التنبيهات */}
+        {alert && (
+          <Alert variant={alert === "added" ? "default" : "destructive"} className="mt-4">
+            <AlertTitle>
+              {alert === "added" ? "Success" : "Error"}
+            </AlertTitle>
+            <AlertDescription>
+              {alert === "added" 
+                ? "Product added to cart successfully!" 
+                : "Please login to add items to cart"}
+            </AlertDescription>
+          </Alert>
+        )}
       </div>
     </div>
   );

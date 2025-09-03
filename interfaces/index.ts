@@ -28,6 +28,11 @@ export interface IBrand {
     logoUrl: string;
     ownerId: string;
 }
+export interface OwnerBrand {
+    id: string;
+    name: string;
+
+}
 
 export interface MobileNavItemProps {
     href: string;

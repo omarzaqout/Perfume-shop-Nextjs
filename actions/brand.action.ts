@@ -13,28 +13,79 @@ export const getBrandListActions = async () => {
     });
 };
 
-export const getBrandByOwnerIdActions = async (ownerId: string) => {
-    return await prisma.brand.findFirst({
-        where: { ownerId },
-        select: { id: true },
+export const getBrandsByOwnerIdActions = async (ownerId: string) => {
+    const brands = await prisma.brand.findMany({
+        where: {
+            brandOwners: {
+                some: {
+                    userId: ownerId, // بنفلتر حسب الـ userId في BrandOwner
+                },
+            },
+        },
+        select: {
+            id: true,
+            name: true,
+        },
     });
+
+    return brands;
 };
+
 
 export const createBrandActions = async ({
     name,
     logoUrl,
     ownerId,
 }: IBrand) => {
-    await prisma.brand.create({
+    let existingBrand = await prisma.brand.findFirst({
+        where: {
+            name: {
+                equals: name,
+                mode: "insensitive",
+            },
+        },
+    });
+
+    if (existingBrand) {
+        // تحقق هل الربط موجود
+        const existingLink = await prisma.brandOwner.findFirst({
+            where: {
+                brandId: existingBrand.id,
+                userId: ownerId,
+            },
+        });
+
+        if (!existingLink) {
+            await prisma.brandOwner.create({
+                data: {
+                    brandId: existingBrand.id,
+                    userId: ownerId,
+                },
+            });
+        }
+
+        return existingBrand;
+    }
+
+    const newBrand = await prisma.brand.create({
         data: {
             name,
             logoUrl,
-            ownerId,
+        },
+    });
+
+    await prisma.brandOwner.create({
+        data: {
+            brandId: newBrand.id,
+            userId: ownerId,
         },
     });
 
     revalidatePath("/");
+
+    return newBrand;
 };
+
 
 export const getBrands = async () => {
     const brands = await prisma.brand.findMany({
@@ -44,10 +95,14 @@ export const getBrands = async () => {
         select: {
             name: true,
             logoUrl: true,
-            owner: {
+            brandOwners: {
                 select: {
-                    name: true,
-                    email: true,
+                    user: {
+                        select: {
+                            name: true,
+                            email: true,
+                        },
+                    },
                 },
             },
             _count: {
@@ -61,11 +116,14 @@ export const getBrands = async () => {
     return brands.map((brand) => ({
         brandName: brand.name,
         brandLogo: brand.logoUrl,
-        ownerName: brand.owner.name,
-        ownerEmail: brand.owner.email,
+        owners: brand.brandOwners.map((bo) => ({
+            ownerName: bo.user.name,
+            ownerEmail: bo.user.email,
+        })),
         productCount: brand._count.products,
     }));
 };
+
 
 export const getBrandByIdAction = async (id: string) => {
     try {

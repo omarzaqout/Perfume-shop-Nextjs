@@ -26,7 +26,7 @@ model User {
   role      Role     @default(CLIENT)
   createdAt DateTime @default(now())
 
-  brands         Brand[]
+  brandOwners    BrandOwner[]
   orders         Order[]
   cart           Cart?
   sellerRequests SellerRequest[]
@@ -47,14 +47,23 @@ model SellerRequest {
   status    RequestStatus @default(PENDING)
 }
 model Brand {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  name    String  @unique
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String   @unique
   logoUrl String?
 
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id])
+  brandOwners BrandOwner[]
+  products     Product[]
+}
 
-  products Product[]
+model BrandOwner {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+
+  brandId String @db.ObjectId
+  userId  String
+  brand Brand @relation(fields: [brandId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@unique([brandId, userId])
 }
 
 model Product {
