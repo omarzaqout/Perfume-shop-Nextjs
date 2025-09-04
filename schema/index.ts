@@ -30,7 +30,7 @@ export const productFormSchema = z.object({
       message: "Invalid category ID format (must be 24 characters)",
     }),
 
-    
+
   BrandId: z
     .string()
     .length(24, {
@@ -74,7 +74,7 @@ export const premiumAccountFormSchema = z.object({
     .min(5, { message: "Address must be at least 5 characters" })
     .max(200, { message: "Address must not exceed 200 characters" }),
 
-      image: z
+  image: z
     .instanceof(File, { message: "Image is required." })
     .optional()
     .refine((file) => !file || file.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
@@ -82,4 +82,20 @@ export const premiumAccountFormSchema = z.object({
       (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
       "Only .jpg, .jpeg, .png and .webp formats are supported."
     ),
+});
+
+
+
+export const OrderFormSchema = z.object({
+  address: z
+    .string()
+    .min(3, { message: "Address must be at least 3 characters" })
+    .max(150, { message: "Address must not exceed 100 characters" }),
+
+
+  Phone: z.coerce.number().min(100000000, {
+    message: "Phone number must be at least 10 digits",
+  }
+  ),
+
 });

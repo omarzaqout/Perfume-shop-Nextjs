@@ -46,22 +46,23 @@ model SellerRequest {
   createdAt DateTime      @default(now())
   status    RequestStatus @default(PENDING)
 }
+
 model Brand {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  name    String   @unique
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  name    String  @unique
   logoUrl String?
 
   brandOwners BrandOwner[]
-  products     Product[]
+  products    Product[]
 }
 
 model BrandOwner {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   brandId String @db.ObjectId
   userId  String
-  brand Brand @relation(fields: [brandId], references: [id])
-  user  User  @relation(fields: [userId], references: [id])
+  brand   Brand  @relation(fields: [brandId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
 
   @@unique([brandId, userId])
 }
@@ -103,6 +104,8 @@ model Order {
   total     Float
   status    OrderStatus @default(PENDING)
   createdAt DateTime    @default(now())
+  address   String
+  phone     Int
 }
 
 model OrderItem {

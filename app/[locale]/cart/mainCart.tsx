@@ -1,6 +1,7 @@
 "use client";
 
 import { clearCart, deleteCartItem, getCart } from "@/actions/cart.action";
+import AddOrderForm from "@/components/order/AddOrderForm";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 
@@ -12,13 +13,12 @@ interface CartItem {
   price: number;
   quantity: number;
   image: string;
-  maxQuantity: number; // <-- الحد الأقصى حسب المنتج
+  maxQuantity: number;
 }
 
 const MainCart = ({ userId }: { userId: string }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  // جلب السلة من السيرفر
   useEffect(() => {
     console.log("userId in cart page", userId);
     const fetchCart = async () => {
@@ -33,7 +33,7 @@ const MainCart = ({ userId }: { userId: string }) => {
             price: item.product.price,
             quantity: item.quantity,
             image: item.product.imageUrl,
-            maxQuantity: item.product.quantity, // <-- هنا
+            maxQuantity: item.product.quantity,
           }));
           setCartItems(mapped);
         }
@@ -56,7 +56,7 @@ const MainCart = ({ userId }: { userId: string }) => {
         item.id === id
           ? {
               ...item,
-              quantity: Math.min(item.quantity + 1, item.maxQuantity), // ما يزيد عن maxQuantity
+              quantity: Math.min(item.quantity + 1, item.maxQuantity),
             }
           : item
       )
@@ -67,7 +67,7 @@ const MainCart = ({ userId }: { userId: string }) => {
     setCartItems((prev) =>
       prev.map((item) =>
         item.id === id
-          ? { ...item, quantity: Math.max(item.quantity - 1, 1) } // لا تقل عن 1
+          ? { ...item, quantity: Math.max(item.quantity - 1, 1) }
           : item
       )
     );
@@ -110,9 +110,7 @@ const MainCart = ({ userId }: { userId: string }) => {
             </span>
           </div>
 
-          <button className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 px-4 rounded-xl font-medium mt-6 transition duration-200">
-            Confirm Order
-          </button>
+          <AddOrderForm userId={userId} total={total} items={cartItems} />
         </div>
       </div>
 
