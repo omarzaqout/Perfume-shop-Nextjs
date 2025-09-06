@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 // Cart item type
 interface CartItem {
   id: string;
+  productId: string;
   name: string;
   brand: string;
   price: number;
@@ -28,6 +29,7 @@ const MainCart = ({ userId }: { userId: string }) => {
         if (cart?.items) {
           const mapped = cart.items.map((item: any) => ({
             id: item.id,
+            productId: item.product.id,
             name: item.product.name,
             brand: item.product.brand?.name || "Unknown",
             price: item.product.price,

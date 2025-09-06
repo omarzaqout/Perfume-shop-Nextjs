@@ -108,8 +108,45 @@ const ContentSidebar = ({
                   {t("register_brand")}
                 </span>
               </LinkWithSpinner>
+
+              {/* -- وتم التعديل هنا -- */}
+              <LinkWithSpinner
+                href="/orders-management"
+                className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
+              >
+                <ClipboardPlus
+                  size={20}
+                  className="text-muted-foreground group-hover:text-inherit transition-colors"
+                />
+                <span className="font-medium text-inherit">
+                  {"manage_orders"}
+                </span>
+              </LinkWithSpinner>
             </>
           )}
+          {role === "SELLER" && (
+            <LinkWithSpinner
+              href="/sales"
+              className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
+            >
+              <ClipboardPlus
+                size={20}
+                className="text-muted-foreground group-hover:text-inherit transition-colors"
+              />
+              <span className="font-medium text-inherit">{"my_sales"}</span>
+            </LinkWithSpinner>
+          )}
+
+          <LinkWithSpinner
+            href="/orders"
+            className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
+          >
+            <Tags
+              size={20}
+              className="text-muted-foreground group-hover:text-inherit transition-colors"
+            />
+            <span className="font-medium text-inherit">{"my_orders"}</span>
+          </LinkWithSpinner>
         </div>
 
         <CollapsibleSection

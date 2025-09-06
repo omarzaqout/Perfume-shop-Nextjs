@@ -38,6 +38,7 @@ const AddOrderForm = ({
   total: number;
   items: {
     id: string;
+    productId: string;
     name: string;
     brand: string;
     price: number;
@@ -72,7 +73,7 @@ const AddOrderForm = ({
       );
       await Promise.all(
         items.map((item) =>
-          addOrderItems(orderId, item.id, item.quantity, item.price)
+          addOrderItems(orderId, item.productId, item.quantity, item.price)
         )
       );
 
