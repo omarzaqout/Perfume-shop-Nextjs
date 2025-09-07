@@ -20,12 +20,12 @@ generator client {
 }
 
 model User {
-  id        String   @id @map("_id")
-  email     String   @unique
-  name      String
-  role      Role     @default(CLIENT)
-  createdAt DateTime @default(now())
-
+  id             String          @id @map("_id")
+  email          String          @unique
+  name           String
+  role           Role            @default(CLIENT)
+  createdAt      DateTime        @default(now())
+  productLimit   Int             @default(20)
   brandOwners    BrandOwner[]
   orders         Order[]
   cart           Cart?

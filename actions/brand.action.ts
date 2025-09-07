@@ -86,43 +86,43 @@ export const createBrandActions = async ({
     return newBrand;
 };
 
-
-export const getBrands = async () => {
-    const brands = await prisma.brand.findMany({
-        orderBy: {
-            name: "desc",
-        },
-        select: {
-            name: true,
-            logoUrl: true,
+export const getSellers = async () => {
+    const sellers = await prisma.user.findMany({
+        where: { role: "SELLER" },
+        include: {
             brandOwners: {
-                select: {
-                    user: {
-                        select: {
-                            name: true,
-                            email: true,
+                include: {
+                    brand: {
+                        include: {
+                            products: true,
                         },
                     },
                 },
             },
-            _count: {
+            sellerRequests: {
                 select: {
-                    products: true,
+                    logoUrl: true,
                 },
+                take: 1,
+                orderBy: { createdAt: "desc" }, // latest request first
             },
         },
     });
 
-    return brands.map((brand) => ({
-        brandName: brand.name,
-        brandLogo: brand.logoUrl,
-        owners: brand.brandOwners.map((bo) => ({
-            ownerName: bo.user.name,
-            ownerEmail: bo.user.email,
-        })),
-        productCount: brand._count.products,
+    return sellers.map((seller) => ({
+        sellerName: seller.name,
+        sellerEmail: seller.email,
+        productLimit: seller.productLimit,
+        brandCount: seller.brandOwners.length, // number of brands this seller owns
+        productCount: seller.brandOwners.reduce(
+            (sum, bo) => sum + bo.brand.products.length,
+            0
+        ), // total products across all brands
+        ownerLogo: seller.sellerRequests[0]?.logoUrl ?? null,
     }));
 };
+
+
 
 
 export const getBrandByIdAction = async (id: string) => {

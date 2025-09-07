@@ -5,28 +5,28 @@ import { IProduct } from "@/interfaces";
 const prisma = new PrismaClient();
 
 export async function getProductListActions(searchTerm?: string, skip = 0, take = 10) {
-    return await prisma.product.findMany({
-        where: searchTerm
-            ? {
-                name: {
-                    contains: searchTerm,
-                    mode: "insensitive",
-                },
-            }
-            : {},
-        orderBy: {
-            name: "desc",
+  return await prisma.product.findMany({
+    where: searchTerm
+      ? {
+        name: {
+          contains: searchTerm,
+          mode: "insensitive",
         },
-        skip,
-        take,
-        include: {
-            brand: {
-                select: {
-                    name: true,
-                },
-            },
+      }
+      : {},
+    orderBy: {
+      name: "desc",
+    },
+    skip,
+    take,
+    include: {
+      brand: {
+        select: {
+          name: true,
         },
-    });
+      },
+    },
+  });
 }
 
 export async function getProductsByCategoryActions(
@@ -122,29 +122,58 @@ export async function getProductsByBrandActions(
 }
 
 
-
 export const createProductActions = async ({
-    name,
-    description,
-    price,
-    imageUrl,
-    quantity,
-    categoryId,
-    brandId,
-}: IProduct) => {
-    console.log("Creating product with data:");
-    await prisma.product.create({
-        data: {
-            name,
-            description,
-            price,
-            imageUrl: imageUrl ?? "",
-            quantity,
-            categoryId,
-            brandId,
+  name,
+  description,
+  price,
+  imageUrl,
+  quantity,
+  categoryId,
+  brandId,
+  userId, // 👈 seller's userId must be passed here
+}: IProduct & { userId: string }) => {
+  // 1. Fetch seller data
+  const seller = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      brandOwners: {
+        include: {
+          brand: {
+            include: { products: true },
+          },
         },
-    });
-    revalidatePath("/");
+      },
+    },
+  });
+
+  if (!seller || seller.role !== "SELLER") {
+    throw new Error("User is not a seller.");
+  }
+
+  // 2. Count total products owned by this seller
+  const totalProducts = seller.brandOwners.reduce(
+    (sum, bo) => sum + bo.brand.products.length,
+    0
+  );
+
+  if (totalProducts >= seller.productLimit) {
+    throw new Error("You have reached your maximum allowed number of products.");
+  }
+
+  // 3. Create the product
+  await prisma.product.create({
+    data: {
+      name,
+      description,
+      price,
+      imageUrl: imageUrl ?? "",
+      quantity,
+      categoryId,
+      brandId,
+    },
+  });
+
+  revalidatePath("/");
 };
 
 export async function getProductByIdAction(productId: string) {
@@ -186,13 +215,13 @@ export async function getProductByIdAction(productId: string) {
         ...product.brand,
         owner: brandOwner
           ? {
-              ...brandOwner,
-              companyName: sellerRequest?.name || brandOwner.name,
-              logoUrl: sellerRequest?.logoUrl || null,
-              phone: sellerRequest?.phone || null,
-              address: sellerRequest?.address || null,
-              description: sellerRequest?.description || null,
-            }
+            ...brandOwner,
+            companyName: sellerRequest?.name || brandOwner.name,
+            logoUrl: sellerRequest?.logoUrl || null,
+            phone: sellerRequest?.phone || null,
+            address: sellerRequest?.address || null,
+            description: sellerRequest?.description || null,
+          }
           : null,
       },
     };
@@ -203,3 +232,12 @@ export async function getProductByIdAction(productId: string) {
     return null;
   }
 }
+
+//update product limit for seller
+export const updateProductLimit = async (email: string, newLimit: number) => {
+  await prisma.user.update({
+    where: { email },
+    data: { productLimit: newLimit },
+  });
+  revalidatePath("/");
+};

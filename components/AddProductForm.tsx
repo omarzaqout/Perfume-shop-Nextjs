@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import {ICategory, OwnerBrand } from "@/interfaces";
+import { ICategory, OwnerBrand } from "@/interfaces";
 
 import {
   Dialog,
@@ -103,6 +103,7 @@ const AddProductForm = ({
         quantity: values.quantity || 1,
         categoryId: values.categoryId,
         brandId: values.BrandId,
+        userId: userId as string,
       });
 
       setIsclose(false);
@@ -258,7 +259,7 @@ const AddProductForm = ({
                 )}
               />
 
-                            <FormField
+              <FormField
                 control={form.control}
                 name="BrandId"
                 render={({ field }) => (

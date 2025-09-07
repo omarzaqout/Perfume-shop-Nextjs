@@ -24,17 +24,37 @@ export async function createOrder(userId: string, address: string, phone: number
 
 //add order items
 
-export async function addOrderItems(orderId: string, productId: string, quantity: number, price: number) {
+export async function addOrderItems(
+    orderId: string,
+    productId: string,
+    quantity: number,
+    price: number
+) {
     const orderItem = await prisma.orderItem.create({
         data: {
             orderId,
             productId,
             quantity,
             price,
-        }
+        },
     });
+
+    await prisma.product.update({
+        where: { id: productId },
+        data: {
+            quantity: {
+                set: (await prisma.product.findUnique({
+                    where: { id: productId },
+                    select: { quantity: true },
+                }))!.quantity - quantity,
+            },
+        },
+    });
+
     revalidatePath("/dashboard/orders");
+    return orderItem;
 }
+
 
 
 export async function getOrdersByUserId(userId: string) {
@@ -84,7 +104,6 @@ export async function getOrdersByUserId(userId: string) {
 
 
 export async function getOrdersForSeller(sellerId: string) {
-    // نجلب كل الأوردرز
     const orders = await prisma.order.findMany({
         orderBy: { createdAt: "desc" },
         include: {

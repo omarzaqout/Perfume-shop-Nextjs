@@ -1,8 +1,18 @@
-import { getBrands } from "@/actions/brand.action";
+import { getSellers } from "@/actions/brand.action";
+import { updateProductLimit } from "@/actions/product.action";
 import BrandsTable from "@/components/BrandsTable";
 
 export default async function Page() {
-  const brands = await getBrands();
+  const sellers = await getSellers();
 
-  return <BrandsTable brands={brands} />;
+  const mappedSellers = sellers.map((seller) => ({
+    sellerName: seller.sellerName,
+    sellerEmail: seller.sellerEmail,
+    productLimit: seller.productLimit,
+    brandCount: seller.brandCount,
+    productCount: seller.productCount,
+    ownerLogo: seller.ownerLogo,
+  }));
+
+  return <BrandsTable sellers={mappedSellers} />;
 }
