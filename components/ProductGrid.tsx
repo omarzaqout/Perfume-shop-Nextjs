@@ -29,7 +29,7 @@ type ProductGridProps = {
   loadMoreAction?: (skip: number, take: number) => Promise<Product[]>;
   hasMore?: boolean;
   categoryId?: string;
-  brandId?: string; // ✅ أضفنا brandId
+  brandId?: string;
   searchQuery?: string;
   userId?: string;
 };
@@ -55,12 +55,18 @@ export default function ProductGrid({
   const [isPending, startTransition] = useTransition();
   const [isLoading, setIsLoading] = useState(!initialProducts.length);
 
-  const fetchProducts = (search: string, skip: number, take: number) => {
+  const fetchProducts = (search: string, skip: number, take: number, currentBrandId?: string) => {
     if (categoryId) {
-      return getProductsByCategoryActions(categoryId, search, skip, take);
+      return getProductsByCategoryActions(
+        categoryId, 
+        search,
+        skip, 
+        take, 
+        currentBrandId || brandId
+      );
     }
     if (brandId) {
-      return getProductsByBrandActions(brandId, search, skip, take); // ✅ شرط جديد
+      return getProductsByBrandActions(brandId, search, skip, take);
     }
     return getProductListActions(search, skip, take);
   };
@@ -68,7 +74,7 @@ export default function ProductGrid({
   useEffect(() => {
     setIsLoading(true);
     startTransition(() => {
-      fetchProducts(effectiveSearchQuery, 0, take).then((newProducts) => {
+      fetchProducts(effectiveSearchQuery, 0, take, brandId).then((newProducts) => {
         setProducts(newProducts);
         setSkip(newProducts.length);
         skipRef.current = newProducts.length;
@@ -76,13 +82,13 @@ export default function ProductGrid({
         setIsLoading(false);
       });
     });
-  }, [effectiveSearchQuery, categoryId, brandId]); // ✅ أضفنا brandId هنا
+  }, [effectiveSearchQuery, categoryId, brandId]);
 
   const loadMore = () => {
     if (!hasMore || isPending) return;
 
     startTransition(() => {
-      fetchProducts(effectiveSearchQuery, skipRef.current, take).then(
+      fetchProducts(effectiveSearchQuery, skipRef.current, take, brandId).then(
         (newProducts) => {
           setProducts((prev) => [...prev, ...newProducts]);
           const newSkip = skipRef.current + newProducts.length;
@@ -94,6 +100,7 @@ export default function ProductGrid({
     });
   };
 
+  // ✅ scroll listener معدل
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -106,7 +113,7 @@ export default function ProductGrid({
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore, isPending, effectiveSearchQuery]);
+  }, [hasMore, isPending, effectiveSearchQuery, brandId]);
 
   return (
     <>
