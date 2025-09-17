@@ -1,9 +1,9 @@
+// components/ui/ContentSidebar.tsx
 "use client";
 import React, { useState } from "react";
 
 import { ICategory } from "@/interfaces";
 import { useTranslations } from "next-intl";
-import { LinkWithSpinner } from "./ui/LinkWithSpinner";
 import {
   Home,
   ShoppingBag,
@@ -17,7 +17,9 @@ import {
   Tags,
   ClipboardPlus,
   Bookmark,
+  Package,
 } from "lucide-react";
+import { LinkWithSpinner } from "./ui/LinkWithSpinner";
 
 interface Brand {
   name: string;
@@ -81,7 +83,6 @@ const ContentSidebar = ({
 
           {role === "ADMIN" && (
             <>
-              {/* -- تم التعديل هنا -- */}
               <LinkWithSpinner
                 href="/brands"
                 className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
@@ -95,7 +96,6 @@ const ContentSidebar = ({
                 </span>
               </LinkWithSpinner>
 
-              {/* -- وتم التعديل هنا -- */}
               <LinkWithSpinner
                 href="/requests"
                 className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
@@ -109,7 +109,6 @@ const ContentSidebar = ({
                 </span>
               </LinkWithSpinner>
 
-              {/* -- وتم التعديل هنا -- */}
               <LinkWithSpinner
                 href="/orders-management"
                 className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
@@ -119,22 +118,38 @@ const ContentSidebar = ({
                   className="text-muted-foreground group-hover:text-inherit transition-colors"
                 />
                 <span className="font-medium text-inherit">
-                  {"manage_orders"}
+                  {t("manage_orders")}
                 </span>
               </LinkWithSpinner>
             </>
           )}
           {role === "SELLER" && (
-            <LinkWithSpinner
-              href="/sales"
-              className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
-            >
-              <ClipboardPlus
-                size={20}
-                className="text-muted-foreground group-hover:text-inherit transition-colors"
-              />
-              <span className="font-medium text-inherit">{"my_sales"}</span>
-            </LinkWithSpinner>
+            <>
+              {/* 👈 رابط جديد لمنتجات البائع */}
+              <LinkWithSpinner
+                href="/my-products"
+                className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
+              >
+                <Package
+                  size={20}
+                  className="text-muted-foreground group-hover:text-inherit transition-colors"
+                />
+                <span className="font-medium text-inherit">
+                  {t("myProducts")}
+                </span>
+              </LinkWithSpinner>
+
+              <LinkWithSpinner
+                href="/sales"
+                className="flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 group hover:bg-primary hover:text-primary-foreground"
+              >
+                <ClipboardPlus
+                  size={20}
+                  className="text-muted-foreground group-hover:text-inherit transition-colors"
+                />
+                <span className="font-medium text-inherit">{t("my_sales")}</span>
+              </LinkWithSpinner>
+            </>
           )}
 
           <LinkWithSpinner
@@ -145,7 +160,7 @@ const ContentSidebar = ({
               size={20}
               className="text-muted-foreground group-hover:text-inherit transition-colors"
             />
-            <span className="font-medium text-inherit">{"my_orders"}</span>
+            <span className="font-medium text-inherit">{t("my_orders")}</span>
           </LinkWithSpinner>
         </div>
 
@@ -166,7 +181,6 @@ const ContentSidebar = ({
           ))}
         </CollapsibleSection>
 
-        {/* -- وتم التعديل هنا -- */}
         <CollapsibleSection
           title={t("brands")}
           icon={Bookmark}

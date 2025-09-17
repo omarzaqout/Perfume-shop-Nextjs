@@ -10,7 +10,8 @@ export default function SearchBarVisibility() {
     pathname.includes("/premium") ||
     pathname.includes("/cart") ||
     pathname.includes("/requests") ||
-    pathname.includes("/product");
+    pathname.includes("/product") ||
+    pathname.includes("/my-products");
 
   if (isPremiumPage) {
     return null;
