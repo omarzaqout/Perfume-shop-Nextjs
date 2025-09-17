@@ -30,6 +30,7 @@ model User {
   orders         Order[]
   cart           Cart?
   sellerRequests SellerRequest[]
+  products       Product[]
 }
 
 model SellerRequest {
@@ -80,8 +81,11 @@ model Product {
   category    Category    @relation(fields: [categoryId], references: [id])
   brandId     String      @db.ObjectId
   brand       Brand       @relation(fields: [brandId], references: [id])
+  sellerId    String
+  seller      User        @relation(fields: [sellerId], references: [id])
   orderItems  OrderItem[]
   cartItems   CartItem[]
+  isActive    Boolean     @default(true) // أضف هذا الحقل
 }
 
 enum RequestStatus {
