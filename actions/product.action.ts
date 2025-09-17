@@ -2,29 +2,72 @@
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { IProduct } from "@/interfaces";
+import { getUserRole } from "@/lib/useUserRole";
 const prisma = new PrismaClient();
 
 export async function getProductListActions(searchTerm?: string, skip = 0, take = 10) {
   return await prisma.product.findMany({
-    where: searchTerm
-      ? {
+    where: {
+      isActive: true,
+      ...(searchTerm && {
         name: {
           contains: searchTerm,
           mode: "insensitive",
         },
-      }
-      : {},
+      })
+    },
     orderBy: {
       name: "desc",
     },
     skip,
     take,
-    include: {
+  include: {
       brand: {
         select: {
           name: true,
         },
       },
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+}
+
+
+export async function getSellerProducts(userId: string) {
+  // للتحقق من أن المستخدم موجود وبائع
+  const seller = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true }
+  });
+
+  if (!seller || seller.role !== "SELLER") {
+    return []; // أو قم بإلقاء خطأ، حسب كيفية تعاملك مع الصلاحيات
+  }
+
+  return await prisma.product.findMany({
+    where: {
+      sellerId: userId,
+    },
+    include: {
+      brand: {
+        select: {
+          id: true, // 👈 تم إضافة id هنا
+          name: true,
+        },
+      },
+      category: {
+        select: {
+          id: true, // 👈 تم إضافة id هنا
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 }
@@ -39,6 +82,7 @@ export async function getProductsByCategoryActions(
 
   const where: any = {
     categoryId: categoryId,
+    isActive: true,
   };
 
 
@@ -86,6 +130,7 @@ export async function getProductsByBrandActions(
 
   const where: any = {
     brandId: brandId,
+    isActive: true,
   };
 
   if (search) {
@@ -130,7 +175,7 @@ export const createProductActions = async ({
   quantity,
   categoryId,
   brandId,
-  userId, // 👈 seller's userId must be passed here
+  userId,
 }: IProduct & { userId: string }) => {
   // 1. Fetch seller data
   const seller = await prisma.user.findUnique({
@@ -170,6 +215,8 @@ export const createProductActions = async ({
       quantity,
       categoryId,
       brandId,
+      sellerId: userId,
+        isActive: true,
     },
   });
 
@@ -179,7 +226,10 @@ export const createProductActions = async ({
 export async function getProductByIdAction(productId: string) {
   try {
     const product = await prisma.product.findUnique({
-      where: { id: productId },
+      where: {
+         id: productId ,
+          isActive: true
+        },
       include: {
         brand: {
           include: {
@@ -233,6 +283,77 @@ export async function getProductByIdAction(productId: string) {
   }
 }
 
+interface IUpdateProduct {
+  id: string; // معرف المنتج مطلوب للتعديل
+  name?: string;
+  description?: string;
+  price?: number;
+  imageUrl?: string; // جعلها اختيارية
+  quantity?: number;
+  categoryId?: string;
+  brandId?: string;
+}
+
+export async function updateProduct(data: IUpdateProduct) {
+  const { userId } = await getUserRole();
+
+  if (!userId) {
+    return { success: false, error: "Unauthorized: User not authenticated." };
+  }
+
+  try {
+    const { id, ...updateData } = data;
+
+    const existingProduct = await prisma.product.findUnique({
+      where: { id },
+      select: { sellerId: true },
+    });
+
+    if (!existingProduct) {
+      return { success: false, error: "Product not found." };
+    }
+
+    if (existingProduct.sellerId !== userId) {
+      return { success: false, error: "Unauthorized: You do not own this product." };
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: {
+        ...updateData,
+        updatedAt: new Date(),
+      },
+    });
+
+    revalidatePath("/my-products");
+    revalidatePath("/");
+
+    return { success: true, product: updatedProduct };
+  } catch (error: any) {
+    console.error("Error updating product:", error);
+    return { success: false, error: error.message || "Failed to update product." };
+  }
+}
+
+export async function getProductById(productId: string) {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { 
+        id: productId,
+        isActive: true
+      },
+      include: {
+        category: true,
+        brand: true
+      }
+    })
+    return product
+  } catch (error) {
+    console.error('Error fetching product:', error)
+    return null
+  }
+}
+
 //update product limit for seller
 export const updateProductLimit = async (email: string, newLimit: number) => {
   await prisma.user.update({
@@ -241,3 +362,27 @@ export const updateProductLimit = async (email: string, newLimit: number) => {
   });
   revalidatePath("/");
 };
+
+
+export async function deleteProduct(productId: string) {
+  try {
+    // soft delete باستخدام حقل isActive
+    const product = await prisma.product.update({
+      where: { id: productId },
+      data: { 
+        isActive: false,
+        updatedAt: new Date() // تحديث تاريخ التعديل
+      }
+    })
+
+    revalidatePath('/my-products')
+    
+    return { success: true, product }
+  } catch (error) {
+    console.error('Error deleting product:', error)
+    return { 
+      success: false, 
+      error: 'Failed to delete product' 
+    }
+  }
+}

@@ -129,7 +129,7 @@ export default function AppBarClient({
           </div>
         </div>
 
-        {/* Mobile Version (تم تبسيطه وتحديثه) */}
+          {/* Mobile Version - التعديلات هنا */}
         <div className="md:hidden flex items-center justify-between py-3 gap-4">
           <Link
             href="/"
@@ -161,18 +161,66 @@ export default function AppBarClient({
             </Link>
 
             <SignedIn>
+              {/* إظهار الأيقونة المناسبة حسب دور المستخدم */}
+              {role === "CLIENT" && (
+                <Link
+                  href="/premium"
+                  className="flex items-center p-1.5 text-amber-500 hover:text-amber-400 transition-colors"
+                  aria-label={t.premium}
+                >
+                  <Gem size={18} />
+                </Link>
+              )}
+
               {role === "SELLER" && (
-                <div className="p-1.5 text-green-600" title={t.seller}>
+                <Link
+                  href="/seller-dashboard" // يمكنك تغيير الرابط حسب احتياجك
+                  className="flex items-center p-1.5 text-green-600 hover:text-green-500 transition-colors"
+                  aria-label={t.seller}
+                >
                   <UserCheck size={18} />
-                </div>
+                </Link>
               )}
 
               {role === "ADMIN" && (
-                <div className="p-1.5 text-purple-600" title={t.admin}>
+                <Link
+                  href="/admin-dashboard" // يمكنك تغيير الرابط حسب احتياجك
+                  className="flex items-center p-1.5 text-purple-600 hover:text-purple-500 transition-colors"
+                  aria-label={t.admin}
+                >
                   <Shield size={18} />
-                </div>
+                </Link>
               )}
+
+              <UserButton afterSignOutUrl="/" />
             </SignedIn>
+
+            <SignedOut>
+              {/* زر تسجيل الدخول للمستخدمين غير المسجلين */}
+              <SignInButton mode="modal">
+                <button
+                  className="flex items-center p-1.5 rounded-full hover:bg-accent transition-colors"
+                  aria-label={t.signIn}
+                >
+                  <FiLogIn size={18} />
+                </button>
+              </SignInButton>
+            </SignedOut>
+
+            <Link
+              href="/cart"
+              id="cart-icon"
+              className="relative p-1.5 rounded-full hover:bg-accent transition-colors"
+              aria-label={t.cart}
+            >
+              <FiShoppingCart size={20} />
+              {counterItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                  {counterItems}
+                </span>
+              )}
+            </Link>
+
             <LocaleSwitcher />
             <ModeToggle />
           </div>
