@@ -5,10 +5,9 @@ import { Link } from "@/i18n/navigation";
 import LocaleSwitcher from "../LocaleSwitcher";
 import { ModeToggle } from "../TogleMode";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { Gem, Shield, UserCheck, ShoppingCart, LogIn } from "lucide-react"; // استخدام Lucide للاتساق
+import { Gem, Shield, UserCheck, ShoppingCart, LogIn } from "lucide-react";
 import { FiLogIn, FiShoppingCart } from "react-icons/fi";
 
-// تعريف أنواع الـ props التي سيستقبلها المكون
 type AppBarClientProps = {
   role: string;
   t: {
@@ -54,9 +53,21 @@ export default function AppBarClient({
           </Link>
 
           <div className="flex items-center gap-4">
+            {/* Premium للمستخدمين غير المسجلين أو المسجلين كـ CLIENT */}
+            <SignedOut>
+              <Link
+                href="/premium"
+                className="flex items-center gap-1 text-sm font-medium text-amber-500 hover:text-amber-400 transition-colors"
+                aria-label={t.premium}
+              >
+                <Gem size={16} />
+                {t.premium}
+              </Link>
+            </SignedOut>
+
             <SignedIn>
               <div className="flex items-center gap-4">
-                {/* عرض الزر أو العلامة حسب نوع المستخدم */}
+                {/* Premium للمستخدمين المسجلين كـ CLIENT فقط */}
                 {role === "CLIENT" && (
                   <Link
                     href="/premium"
@@ -68,48 +79,35 @@ export default function AppBarClient({
                   </Link>
                 )}
 
+                {/* Seller للبائعين */}
                 {role === "SELLER" && (
                   <Link
-                    href="/premium"
-                    className="flex items-center gap-1 text-sm font-medium text-green-600"
+                    href="/seller-dashboard"
+                    className="flex items-center gap-1 text-sm font-medium text-green-600 hover:text-green-500 transition-colors"
+                    aria-label={t.sellerPanel}
                   >
                     <UserCheck size={16} />
-                    <span>{t.seller}</span>
+                    {t.sellerPanel}
                   </Link>
                 )}
 
+                {/* Admin للمدراء */}
                 {role === "ADMIN" && (
-                  <div className="flex items-center gap-1 text-sm font-medium text-purple-600">
+                  <Link
+                    href="/admin-dashboard"
+                    className="flex items-center gap-1 text-sm font-medium text-purple-600 hover:text-purple-500 transition-colors"
+                    aria-label={t.adminPanel}
+                  >
                     <Shield size={16} />
-                    <span>{t.admin}</span>
-                  </div>
+                    {t.adminPanel}
+                  </Link>
                 )}
 
                 <UserButton afterSignOutUrl="/" />
               </div>
             </SignedIn>
-            <SignedOut>
-              {/* زر Premium للمستخدمين غير المسجلين */}
-              <Link
-                href="/premium"
-                className="flex items-center gap-1 text-sm font-medium text-amber-500 hover:text-amber-400 transition-colors mr-2"
-                aria-label={t.premium}
-              >
-                <Gem size={16} />
-                {t.premium}
-              </Link>
 
-              <SignInButton mode="modal">
-                <button
-                  className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-accent transition-colors text-sm font-medium"
-                  aria-label={t.signIn}
-                >
-                  <FiLogIn size={18} />
-                  <span className="hidden sm:inline">{t.signIn}</span>
-                </button>
-              </SignInButton>
-            </SignedOut>
-
+            {/* سلة التسوق (للجميع في الدسكتوب) */}
             <Link
               href="/cart"
               id="cart-icon"
@@ -124,12 +122,25 @@ export default function AppBarClient({
               )}
             </Link>
 
+            {/* زر تسجيل الدخول للمستخدمين غير المسجلين */}
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button
+                  className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-accent transition-colors text-sm font-medium"
+                  aria-label={t.signIn}
+                >
+                  <FiLogIn size={18} />
+                  <span className="hidden sm:inline">{t.signIn}</span>
+                </button>
+              </SignInButton>
+            </SignedOut>
+
             <LocaleSwitcher />
             <ModeToggle />
           </div>
         </div>
 
-          {/* Mobile Version - التعديلات هنا */}
+        {/* Mobile Version - بدون سلة التسوق وبدون أيقونة الحساب */}
         <div className="md:hidden flex items-center justify-between py-3 gap-4">
           <Link
             href="/"
@@ -151,17 +162,19 @@ export default function AppBarClient({
           </Link>
 
           <div className="flex items-center gap-3">
-            {/* زر Premium يظهر للجميع في الهاتف */}
-            <Link
-              href="/premium"
-              className="flex items-center p-1.5 text-amber-500 hover:text-amber-400 transition-colors"
-              aria-label={t.premium}
-            >
-              <Gem size={18} />
-            </Link>
+            {/* Premium للمستخدمين غير المسجلين أو المسجلين كـ CLIENT */}
+            <SignedOut>
+              <Link
+                href="/premium"
+                className="flex items-center p-1.5 text-amber-500 hover:text-amber-400 transition-colors"
+                aria-label={t.premium}
+              >
+                <Gem size={18} />
+              </Link>
+            </SignedOut>
 
             <SignedIn>
-              {/* إظهار الأيقونة المناسبة حسب دور المستخدم */}
+              {/* Premium للمستخدمين المسجلين كـ CLIENT فقط */}
               {role === "CLIENT" && (
                 <Link
                   href="/premium"
@@ -172,54 +185,30 @@ export default function AppBarClient({
                 </Link>
               )}
 
+              {/* Seller للبائعين */}
               {role === "SELLER" && (
                 <Link
-                  href="/seller-dashboard" // يمكنك تغيير الرابط حسب احتياجك
-                  className="flex items-center p-1.5 text-green-600 hover:text-green-500 transition-colors"
-                  aria-label={t.seller}
+                  href="/seller-dashboard"
+                  className="p-1.5 text-green-600 hover:text-green-500 transition-colors"
+                  title={t.sellerPanel}
                 >
                   <UserCheck size={18} />
                 </Link>
               )}
 
+              {/* Admin للمدراء */}
               {role === "ADMIN" && (
                 <Link
-                  href="/admin-dashboard" // يمكنك تغيير الرابط حسب احتياجك
-                  className="flex items-center p-1.5 text-purple-600 hover:text-purple-500 transition-colors"
-                  aria-label={t.admin}
+                  href="/admin-dashboard"
+                  className="p-1.5 text-purple-600 hover:text-purple-500 transition-colors"
+                  title={t.adminPanel}
                 >
                   <Shield size={18} />
                 </Link>
               )}
-
-              <UserButton afterSignOutUrl="/" />
+              
+              {/* ما في أيقونة حساب للمسجلين في التلفون */}
             </SignedIn>
-
-            <SignedOut>
-              {/* زر تسجيل الدخول للمستخدمين غير المسجلين */}
-              <SignInButton mode="modal">
-                <button
-                  className="flex items-center p-1.5 rounded-full hover:bg-accent transition-colors"
-                  aria-label={t.signIn}
-                >
-                  <FiLogIn size={18} />
-                </button>
-              </SignInButton>
-            </SignedOut>
-
-            <Link
-              href="/cart"
-              id="cart-icon"
-              className="relative p-1.5 rounded-full hover:bg-accent transition-colors"
-              aria-label={t.cart}
-            >
-              <FiShoppingCart size={20} />
-              {counterItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
-                  {counterItems}
-                </span>
-              )}
-            </Link>
 
             <LocaleSwitcher />
             <ModeToggle />
