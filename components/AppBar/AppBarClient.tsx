@@ -82,25 +82,24 @@ export default function AppBarClient({
                 {/* Seller للبائعين */}
                 {role === "SELLER" && (
                   <Link
-                    href="/seller-dashboard"
+                    href="/premium"
                     className="flex items-center gap-1 text-sm font-medium text-green-600 hover:text-green-500 transition-colors"
-                    aria-label={t.sellerPanel}
+                    aria-label={t.seller}
                   >
                     <UserCheck size={16} />
-                    {t.sellerPanel}
+                    {t.seller}
                   </Link>
                 )}
 
                 {/* Admin للمدراء */}
                 {role === "ADMIN" && (
-                  <Link
-                    href="/admin-dashboard"
+                  <div
                     className="flex items-center gap-1 text-sm font-medium text-purple-600 hover:text-purple-500 transition-colors"
-                    aria-label={t.adminPanel}
+                    aria-label={t.admin}
                   >
                     <Shield size={16} />
-                    {t.adminPanel}
-                  </Link>
+                    {t.admin}
+                  </div>
                 )}
 
                 <UserButton afterSignOutUrl="/" />
@@ -188,9 +187,9 @@ export default function AppBarClient({
               {/* Seller للبائعين */}
               {role === "SELLER" && (
                 <Link
-                  href="/seller-dashboard"
+                  href="/premium"
                   className="p-1.5 text-green-600 hover:text-green-500 transition-colors"
-                  title={t.sellerPanel}
+                  title={t.seller}
                 >
                   <UserCheck size={18} />
                 </Link>
@@ -198,13 +197,12 @@ export default function AppBarClient({
 
               {/* Admin للمدراء */}
               {role === "ADMIN" && (
-                <Link
-                  href="/admin-dashboard"
+                <div
                   className="p-1.5 text-purple-600 hover:text-purple-500 transition-colors"
-                  title={t.adminPanel}
+                  title={t.admin}
                 >
                   <Shield size={18} />
-                </Link>
+                </div>
               )}
               
               {/* ما في أيقونة حساب للمسجلين في التلفون */}

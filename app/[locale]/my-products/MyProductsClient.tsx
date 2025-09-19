@@ -3,7 +3,7 @@
 
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState, useEffect } from "react"; // استيراد React هنا
 import {
   Dialog,
   DialogContent,
@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { deleteProduct } from "@/actions/product.action";
 
 // استيراد مكونات نماذج التعديل الجديدة
+import { ProductCard } from "./ProductCard"; // 👈 استيراد مكون البطاقة الجديد
 
 // تعريف الواجهات المستخدمة
 import { ICategory, OwnerBrand } from "@/interfaces";
@@ -71,14 +72,33 @@ export default function MyProductsClient({
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   // حالات الديالوجات المختلفة
-  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-  const [isEditDataDialogOpen, setIsEditDataDialogOpen] = useState(false); // لنموذج تعديل البيانات
-  const [isEditImageDialogOpen, setIsEditImageDialogOpen] = useState(false); // لنموذج تعديل الصورة
+   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
+  const [isEditDataDialogOpen, setIsEditDataDialogOpen] = useState(false);
+  const [isEditImageDialogOpen, setIsEditImageDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isMobile, setIsMobile] = useState(false); // القيمة الافتراضية false
+  const [isClient, setIsClient] = useState(false); // حالة جديدة للتحقق من أننا على العميل
 
-  // فتح ديالوج تفاصيل المنتج (عند النقر على صف الجدول)
+  // 👈 useEffect للكشف عن حجم الشاشة
+  useEffect(() => {
+    setIsClient(true); // تأكيد أننا على العميل
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    // تحقق عند التحميل الأولي على العميل
+    checkMobile();
+
+    // أضف مستمعًا لحدث تغيير حجم النافذة
+    window.addEventListener('resize', checkMobile);
+
+    // تنظيف المستمع عند إزالة المكون
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // فتح ديالوج تفاصيل المنتج (عند النقر على صف الجدول أو البطاقة)
   const handleProductClick = (product: Product) => {
     setSelectedProduct(product);
     setIsDetailDialogOpen(true);
@@ -90,28 +110,26 @@ export default function MyProductsClient({
     setSelectedProduct(null);
   };
 
-  // فتح ديالوج تعديل البيانات (عند النقر على زر "تعديل" في الجدول أو من ديالوج التفاصيل)
+  // فتح ديالوج تعديل البيانات
   const handleEditDataClick = (product: Product, e?: React.MouseEvent) => {
-    e?.stopPropagation(); // منع فتح ديالوج التفاصيل إذا تم النقر من زر داخل الصف
+    e?.stopPropagation();
     setSelectedProduct(product);
     setIsEditDataDialogOpen(true);
   };
 
-  // فتح ديالوج تعديل الصورة (عند النقر على زر "تعديل الصورة" في الجدول أو من ديالوج التفاصيل)
+  // فتح ديالوج تعديل الصورة
   const handleEditImageClick = (product: Product, e?: React.MouseEvent) => {
-    e?.stopPropagation(); // منع فتح ديالوج التفاصيل
+    e?.stopPropagation();
     setSelectedProduct(product);
     setIsEditImageDialogOpen(true);
   };
 
-  // يتم استدعاء هذه الدالة بعد تحديث أي جزء من المنتج (بيانات أو صورة)
+  // يتم استدعاء هذه الدالة بعد تحديث أي جزء من المنتج
   const handleProductUpdated = () => {
-    // يمكن هنا إعادة جلب المنتجات من الخادم لتحديث القائمة، أو تحديث المنتج المحدد في حالة الـ state `products`
-    // للتبسيط في هذا المثال، سنقوم بإعادة تحميل الصفحة
     window.location.reload();
   };
 
-  // ... (بقية دوال الحذف كما هي)
+  // دوال الحذف
   const handleDeleteClick = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();
     setProductToDelete(product);
@@ -146,113 +164,129 @@ export default function MyProductsClient({
   };
 
 
-  return (
+   return (
     <>
       <div className="container mx-auto p-6 bg-background text-foreground min-h-screen">
         <h1 className="text-3xl font-bold mb-8 text-primary">
           {t("myProductsTitle")}
         </h1>
 
-        {products.length === 0 ? (
+         {products.length === 0 ? (
           <p className="text-center text-muted-foreground text-lg">
             {t("noProducts")}
           </p>
         ) : (
-          <div className="overflow-x-auto rounded-lg shadow-lg border border-border">
-            <table className="min-w-full divide-y divide-border bg-card">
-              <thead className="bg-primary/10">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {t("image")}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {t("name")}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {t("brand")}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {t("category")}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {t("price")}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {t("quantity")}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {t("actions")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {products.map((product) => (
-                  <tr
-                    key={product.id}
-                    className="hover:bg-accent/10 transition-colors cursor-pointer"
-                    onClick={() => handleProductClick(product)}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="w-16 h-16 relative overflow-hidden rounded-md border border-border">
-                        <Image
-                          src={product.imageUrl}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-foreground font-medium">
-                      {product.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-muted-foreground">
-                      {product.brand.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-muted-foreground">
-                      {product.category.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-foreground">
-                      ${product.price.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-foreground">
-                      {product.quantity}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div
-                        className="flex gap-2"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {/* زر لفتح نموذج تعديل البيانات */}
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={(e) => handleEditDataClick(product, e)}
-                        >
-                          {t("editData")}
-                        </Button>
-                        {/* زر لفتح نموذج تعديل الصورة */}
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={(e) => handleEditImageClick(product, e)}
-                        >
-                          {t("editImage")}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={(e) => handleDeleteClick(product, e)}
-                          disabled={isDeleting}
-                        >
-                          {t("delete")}
-                        </Button>
-                      </div>
-                    </td>
+         // تأجيل العرض الشرطي حتى يتم التحميل على العميل
+          !isClient ? null : isMobile ? (
+            <div className="grid grid-cols-1 gap-4">
+              {products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  locale={locale}
+                  onProductClick={handleProductClick}
+                  onEditDataClick={handleEditDataClick}
+                  onEditImageClick={handleEditImageClick}
+                  onDeleteClick={handleDeleteClick}
+                  isDeleting={isDeleting}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="overflow-x-auto rounded-lg shadow-lg border border-border">
+              <table className="min-w-full divide-y divide-border bg-card">
+                <thead className="bg-primary/10">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      {t("image")}
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      {t("name")}
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      {t("brand")}
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      {t("category")}
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      {t("price")}
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      {t("quantity")}
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      {t("actions")}
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {products.map((product) => (
+                    <tr
+                      key={product.id}
+                      className="hover:bg-accent/10 transition-colors cursor-pointer"
+                      onClick={() => handleProductClick(product)}
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="w-16 h-16 relative overflow-hidden rounded-md border border-border">
+                          <Image
+                            src={product.imageUrl}
+                            alt={product.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-foreground font-medium">
+                        {product.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-muted-foreground">
+                        {product.brand.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-muted-foreground">
+                        {product.category.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-foreground">
+                        ${product.price.toFixed(2)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-foreground">
+                        {product.quantity}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div
+                          className="flex gap-2"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={(e) => handleEditDataClick(product, e)}
+                          >
+                            {t("editData")}
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={(e) => handleEditImageClick(product, e)}
+                          >
+                            {t("editImage")}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={(e) => handleDeleteClick(product, e)}
+                            disabled={isDeleting}
+                          >
+                            {t("delete")}
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
         )}
       </div>
 
@@ -360,17 +394,15 @@ export default function MyProductsClient({
                 <Button variant="outline" onClick={handleCloseDetailDialog}>
                   {t("close")}
                 </Button>
-                {/* زر لفتح ديالوج تعديل البيانات من ديالوج التفاصيل */}
                 <Button variant="default" onClick={() => {
-                  handleCloseDetailDialog(); // إغلاق ديالوج التفاصيل
-                  handleEditDataClick(selectedProduct); // فتح ديالوج تعديل البيانات
+                  handleCloseDetailDialog();
+                  handleEditDataClick(selectedProduct);
                 }}>
                   {t("editData")}
                 </Button>
-                {/* زر لفتح ديالوج تعديل الصورة من ديالوج التفاصيل */}
                 <Button variant="secondary" onClick={() => {
-                  handleCloseDetailDialog(); // إغلاق ديالوج التفاصيل
-                  handleEditImageClick(selectedProduct); // فتح ديالوج تعديل الصورة
+                  handleCloseDetailDialog();
+                  handleEditImageClick(selectedProduct);
                 }}>
                   {t("editImage")}
                 </Button>
