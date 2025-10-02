@@ -11,7 +11,6 @@ import { CheckCircle, Clock, DollarSign, Rocket, Users, XCircle } from "lucide-r
 import PremiumRequestForm from "@/components/forms/PremiumRequestForm";
 import { auth } from "@clerk/nextjs/server";
 
-// مكون لعرض حالة الطلب - مع أيقونات مختلفة لكل حالة
 const RequestStatusCard = async ({ status, locale }: { status: string, locale: string }) => {
   const t = await getTranslations({ locale, namespace: "PremiumPage.status" });
   

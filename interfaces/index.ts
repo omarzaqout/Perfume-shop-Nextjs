@@ -40,12 +40,16 @@ export interface MobileNavItemProps {
     onClick: () => void;
 }
 
+
 export interface HeroSlide {
-    title: string;
-    subtitle: string;
-    imageUrl: string;
-    buttonText: string;
-    href: string;
+  id: string;
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  buttonText: string;
+  href: string;
+  isActive: boolean;
+  order: number;
 }
 
 export interface IPrimumAccount {
