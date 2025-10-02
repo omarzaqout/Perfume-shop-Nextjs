@@ -136,3 +136,26 @@ export const updateProductDataSchema = z.object({
 export const updateProductImageSchema = z.object({
   image: z.any().refine((file) => file instanceof File, "Image file is required."),
 });
+
+export const heroSlideFormSchema = z.object({
+  title: z.string().min(1, "العنوان مطلوب"),
+  subtitle: z.string().optional(),
+  buttonText: z.string().optional(),
+  href: z.string().optional(),
+  order: z.number().min(1, "الترتيب يجب أن يكون رقم موجب"),
+  isActive: z.boolean().default(true),
+  imageUrl: z.any().optional(),
+});
+
+export const heroSlideTextSchema = z.object({
+  title: z.string().min(3, { message: "العنوان يجب أن يكون 3 أحرف على الأقل." }),
+  subtitle: z.string().min(5, { message: "العنوان الفرعي يجب أن يكون 5 أحرف على الأقل." }),
+  buttonText: z.string().min(2, { message: "نص الزر يجب أن يكون حرفين على الأقل." }),
+  href: z.string().url({ message: "الرجاء إدخال رابط صالح." }),
+  order: z.coerce.number().int().positive({ message: "الترتيب يجب أن يكون رقمًا صحيحًا موجبًا." }),
+  isActive: z.boolean().default(true),
+});
+
+export const heroSlideImageSchema = z.object({
+  imageUrl: z.any().refine((file) => file instanceof File, "الصورة مطلوبة."),
+});

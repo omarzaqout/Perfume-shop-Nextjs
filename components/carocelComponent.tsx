@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Autoplay from 'embla-carousel-autoplay';
 import Image from "next/image";
-// --- 1. استيراد useLocale ---
 import { useLocale } from 'next-intl'; 
 import { HeroSlide } from '../interfaces';
 

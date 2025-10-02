@@ -7,17 +7,14 @@
     "shopNow": "تسوق الآن",
     "featuredProducts": "منتجات مختارة بعناية",
     "adminPanelTitle": "لوحة تحكم المشرف",
-
     "heroSlide2": {
       "title": "مجموعة الصيف",
       "subtitle": "عطور منعشة وحيوية للأيام المشمسة.",
       "buttonText": "استكشف الآن"
     },
     "noProductsAvailable": "لا توجد منتجات متاحة"
-
   },
-
-   "ProductPage": {
+  "ProductPage": {
     "addToCart": "أضف إلى السلة",
     "quantity": "الكمية",
     "description": "الوصف",
@@ -44,23 +41,22 @@
     "address": "العنوان",
     "aboutStore": "عن المتجر"
   },
-
- "PremiumPage": {
-   "form": {
-    "title": "نموذج طلب البائع",
-    "description": "يرجى تعبئة بيانات متجرك أدناه للبدء.",
-    "storeName": "اسم المتجر",
-    "descriptionLabel": "الوصف",
-    "storeLogo": "شعار المتجر",
-    "phone": "رقم الهاتف",
-    "address": "العنوان",
-    "submit": "إرسال الطلب",
-    "submitting": "جاري الإرسال...",
-    "successTitle": "تم إرسال الطلب!",
-    "successDescription": "تم إرسال طلبك لتصبح بائعًا. سنقوم بمراجعته قريبًا.",
-    "AlertTitle": "لم تتم الموافقة على الطلب السابق",
-    "AlertDescription": "لم تتم الموافقة على طلبك الأخير. يرجى مراجعة معلوماتك وإعادة التقديم."
-  },
+  "PremiumPage": {
+    "form": {
+      "title": "نموذج طلب البائع",
+      "description": "يرجى تعبئة بيانات متجرك أدناه للبدء.",
+      "storeName": "اسم المتجر",
+      "descriptionLabel": "الوصف",
+      "storeLogo": "شعار المتجر",
+      "phone": "رقم الهاتف",
+      "address": "العنوان",
+      "submit": "إرسال الطلب",
+      "submitting": "جاري الإرسال...",
+      "successTitle": "تم إرسال الطلب!",
+      "successDescription": "تم إرسال طلبك لتصبح بائعًا. سنقوم بمراجعته قريبًا.",
+      "AlertTitle": "لم تتم الموافقة على الطلب السابق",
+      "AlertDescription": "لم تتم الموافقة على طلبك الأخير. يرجى مراجعة معلوماتك وإعادة التقديم."
+    },
     "badge": "حصري",
     "title": "ارتقِ بتجربتك، كن بائعًا اليوم",
     "subtitle": "انضم إلى منصتنا كبائع وابدأ في عرض منتجاتك لآلاف العملاء. املأ النموذج أدناه لبدء رحلتك معنا.",
@@ -72,7 +68,6 @@
       "sales": {
         "title": "زيادة المبيعات",
         "description": "استفد من أدواتنا التسويقية لتعزيز مبيعاتك ونمو علامتك التجارية."
-       
       },
       "tools": {
         "title": "أدوات سهلة",
@@ -89,19 +84,17 @@
       "PENDING": {
         "title": "طلبك قيد المراجعة",
         "description": "لقد استلمنا طلبك بنجاح. يقوم فريقنا بمراجعته حاليًا وسيتم إعلامك بالقرار قريبًا. شكرًا لصبرك!"
-         
       },
       "APPROVED": {
         "title": "تهانينا، تم قبول طلبك!",
         "description": "أنت الآن بائع معتمد على منصتنا. يمكنك البدء في إضافة منتجاتك وإدارة متجرك من لوحة التحكم الخاصة بك."
       },
-       "REJECTED": {
+      "REJECTED": {
         "title": "تحديث بخصوص طلبك",
         "description": "بعد المراجعة، نأسف لإعلامك بأنه لا يمكننا المضي قدمًا في طلبك في الوقت الحالي. يرجى مراجعة بريدك الإلكتروني لمزيد من التفاصيل."
       }
     }
   },
-
   "Metadata": {
     "storeName": "متجر العطور",
     "categoryDescription": "تصفح أفضل المنتجات في فئة {categoryName}.",
@@ -112,7 +105,7 @@
     "noProducts": "عذراً، لا توجد منتجات في هذه الفئة حالياً.",
     "allBrands": "كل الماركات"
   },
-   "BrandPage": {
+  "BrandPage": {
     "browsePrompt": "تصفح عطور {brandName}.",
     "noProducts": "لا توجد منتجات متاحة لهذه العلامة التجارية.",
     "allCategories": "كل الفئات"
@@ -129,7 +122,7 @@
     "changeLanguage": "تغيير اللغة",
     "openMenu": "فتح القائمة",
     "closeMenu": "إغلاق القائمة",
-     "premium": "العضوية المميزة",
+    "premium": "العضوية المميزة",
     "seller": "بائع",
     "admin": "مدير",
     "sellerPanel": "لوحة البائع",
@@ -151,9 +144,64 @@
     "manage_orders": "إدارة الطلبات",
     "myProducts": "منتجاتي",
     "my_sales": "مبيعاتي",
-    "my_orders": "طلباتي"
+    "my_orders": "طلباتي",
+    "manage_carousel": "إدارة الكاروسيل"
   },
-   "MyProductsPage": {
+  "CarouselManagement": {
+    "title": "إدارة شرائح الكاروسيل",
+    "add_slide": "إضافة شريحة جديدة",
+    "table_header_image": "الصورة",
+    "table_header_title": "العنوان",
+    "table_header_status": "الحالة",
+    "table_header_order": "الترتيب",
+    "table_header_actions": "إجراءات",
+    "table_header_subtitle": "العنوان الفرعي",
+    "status_active": "فعال",
+    "status_inactive": "غير فعال",
+    "no_slides": "لا توجد شرائح كاروسيل لعرضها.",
+    "delete_confirm": "هل أنت متأكد أنك تريد حذف الشريحة: \"{title}\"؟",
+    "delete_success": "تم حذف الشريحة بنجاح.",
+    "delete_failed": "فشل في حذف الشريحة.",
+    "update_success": "تم تحديث الشريحة بنجاح.",
+    "update_failed": "فشل في تحديث الشريحة.",
+    "form_title": "العنوان الرئيسي",
+    "form_subtitle": "العنوان الفرعي",
+    "form_image_url": "رابط الصورة (URL)",
+    "form_button_text": "نص الزر",
+    "form_href": "رابط الانتقال (Href)",
+    "form_is_active": "حالة التفعيل",
+    "form_order": "ترتيب العرض",
+    "edit_slide": "تعديل الشريحة",
+    "create_slide": "إنشاء شريحة",
+    "save_changes": "حفظ التغييرات",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "slide_details": "تفاصيل الشريحة",
+    "carousel_management": "إدارة الشرائح",
+    "edit_info": "تعديل المعلومات",
+    "edit_image": "تعديل الصورة",
+    "edit_slide_info": "تعديل معلومات الشريحة",
+    "edit_slide_image": "تعديل صورة الشريحة",
+    "update_info": "تحديث المعلومات",
+    "update_image": "تحديث الصورة",
+    "image_preview": "معاينة الصورة",
+    "slide_not_found": "الشريحة غير موجودة",
+    "back_to_management": "العودة للإدارة",
+    "loading": "جاري التحميل...",
+    "image_requirements": "الحجم الأقصى: 5MB، الأنواع المسموحة: JPG, PNG, WebP",
+    "cancel": "إلغاء",
+    "confirm_delete": "تأكيد الحذف",
+    "delete_warning": "هل أنت متأكد من أنك تريد حذف هذه الشريحة؟",
+    "delete_irreversible": "هذا الإجراء لا يمكن التراجع عنه.",
+    "deleting": "جاري الحذف...",
+    "slide_details_description": "عرض تفاصيل الشريحة",
+    "main_image": "الصورة الرئيسية",
+    "basic_info": "المعلومات الأساسية",
+    "additional_info": "معلومات إضافية",
+    "order_hint": "ترتيب الظهور",
+     "slides_count": "شريحة"
+  },
+  "MyProductsPage": {
     "myProductsTitle": "إدارة منتجاتي",
     "noProducts": "ليس لديك أي منتجات مدرجة حالياً.",
     "image": "صورة",
@@ -194,7 +242,6 @@
     "updateDataSuccess": "تم تحديث بيانات المنتج بنجاح!",
     "updateDataError": "حدث خطأ أثناء تحديث بيانات المنتج. يرجى المحاولة مرة أخرى.",
     "editData": "تعديل البيانات",
-
     "editProductImageTitle": "تعديل صورة المنتج",
     "editProductImageDescription": "قم بتحميل صورة جديدة للمنتج.",
     "currentImage": "الصورة الحالية",
@@ -214,7 +261,6 @@
     "cart": "السلة",
     "account": "حسابي"
   },
-
   "AddToCart": {
     "login_required": "يجب تسجيل الدخول",
     "please_login_to_add_items": "يرجى تسجيل الدخول لإضافة منتجات إلى السلة",
